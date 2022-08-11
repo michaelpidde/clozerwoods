@@ -1,11 +1,21 @@
 ﻿using ClozerWoods.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 
 namespace ClozerWoods.Models;
 
 public class ApplicationDbContext : DbContext {
+    private readonly IConfiguration _config;
+
+    public ApplicationDbContext(IConfiguration config) : base() {
+        _config = config;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options) {
-        var connectionString = "server=localhost;database=clozerwoods;user=root;password=password";
+        var connectionBuilder = new MySqlConnectionStringBuilder();
+        connectionBuilder.ConnectionString = _config.GetConnectionString("MySQL");
+        connectionBuilder.Password = _config["MySqlPassword"];
+        var connectionString = connectionBuilder.ConnectionString;
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 
