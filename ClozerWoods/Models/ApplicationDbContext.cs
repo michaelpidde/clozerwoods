@@ -14,6 +14,7 @@ public class ApplicationDbContext : DbContext {
     protected override void OnConfiguring(DbContextOptionsBuilder options) {
         var connectionBuilder = new MySqlConnectionStringBuilder();
         connectionBuilder.ConnectionString = _config.GetConnectionString("MySQL");
+        connectionBuilder.UserID = _config["MySqlUser"];
         connectionBuilder.Password = _config["MySqlPassword"];
         var connectionString = connectionBuilder.ConnectionString;
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
