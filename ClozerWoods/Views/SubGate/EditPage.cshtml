@@ -1,0 +1,41 @@
+﻿@using ClozerWoods.Models.SubGate;
+@model PagesViewModel
+@{
+    Layout = "../Shared/_DashboardLayout.cshtml";
+    ViewData["Title"] = "Edit Page";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        window.onload = () => {
+            const pageId = document.getElementById('pageId');
+            if(pageId != null) {
+                pageId.onchange = () => {
+                    var url = location.protocol + '//' + location.host + location.pathname;
+                    if(pageId.value != "") {
+                        url += '?pageId=' + pageId.value;
+                    }
+                    location.href = url;
+                }
+            }
+        }
+    </script>
+}
+
+<form method="post" asp-controller="SubGate" asp-action="EditPage">
+    @if(Model.PageListItems!.Any()) {
+        <label for="id">Page</label>
+        <select name="pageId" id="pageId" asp-items="Model.PageListItems"></select>
+    }
+    <label for="title">Title</label>
+    <input type="text" name="title" value="@Model.SelectedPage!.Title" />
+    <label for="published">Published</label>
+    @{
+        var published = "";
+        if(Model.SelectedPage.Published) {
+            published = "checked";
+        }
+    }
+    <input type="checkbox" name="published" @published />
+    <input type="submit" name="submit" value="Save" />
+</form>

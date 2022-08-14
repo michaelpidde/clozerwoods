@@ -1,18 +1,76 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+:root {
+    --primary-color: #c7dc8e;
+    --border-style: 1px solid #000000;
+    --secondary-color: #cccccc;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #fffae4;
+    font-family: Verdana;
+}
+
+header {
+    margin: 10px;
+    padding: 10px;
+    border: var(--border-style);
+    background-color: var(--primary-color);
+}
+
+nav ul {
+    list-style: none;
+}
+nav li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+a {
+    color: #0077cc;
+}
+
+h1 {
+    font-size: 130%;
+}
+
+main {
+    margin: 10px;
+    padding: 10px;
+    border: var(--border-style);
+    background-color: var(--primary-color);
+}
+
+aside {
+    float: left;
+    width: 200px;
+    padding: 10px;
+    margin: 10px 30px 10px 10px;
+    border: var(--border-style);
+    background-color: var(--secondary-color);
+    font-size: 80%;
+}
+
+.clear {
+    clear: both;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+label:after {
+    content: ":";
+}
+
+input, select {
+    display: block;
+    margin-bottom: 10px;
+}
+
+submit {
+    display: block;
 }

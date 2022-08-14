@@ -9,6 +9,7 @@ var services = builder.Services;
 services.AddControllersWithViews();
 services.AddDbContext<ApplicationDbContext>();
 services.AddTransient<IUserRepository, UserRepository>();
+services.AddTransient<IPageRepository, PageRepository>();
 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {

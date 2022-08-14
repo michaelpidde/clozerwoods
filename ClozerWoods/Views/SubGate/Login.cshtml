@@ -3,10 +3,10 @@
 }
 
 <h1>Clozer Woods Sub-Gate</h1>
-<form method="post" action="/subgate/login">
+<form method="post" asp-controller="SubGate" asp-action="Login">
     <label for="username">Username</label>
     <input type="text" name="username" />
     <label for="password">Password</label>
     <input type="password" name="password" />
-    <input type="submit" value="Login" />
+    <input type="submit" name="submit" value="Login" />
 </form>

@@ -20,5 +20,8 @@ public class ApplicationDbContext : DbContext {
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 
-    public DbSet<User> ?Users { get; set; }
+    public DbSet<User>? Users { get; set; }
+    public DbSet<Page>? Pages { get; set; }
+    public DbSet<Gallery>? Galleries { get; set; }
+    public DbSet<GalleryItem>? GalleryItems { get; set; }
 }

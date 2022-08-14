@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+}
+
+<h1>Clozer Woods Sub-Gate - @ViewData["Title"]</h1>
+<aside>
+    <ul>
+        <li><a asp-area="" asp-controller="SubGate" asp-action="EditPage">Pages</a></li>
+        <li><a asp-area="" asp-controller="SubGate" asp-action="EditGalleries">Galleries</a></li>
+        <li><a asp-area="" asp-controller="SubGate" asp-action="EditGalleryItems">All Gallery Items</a></li>
+    </ul>
+</aside>
+
+@RenderBody()
+
+@section scripts {
+    @RenderSection("scripts", false)
+}

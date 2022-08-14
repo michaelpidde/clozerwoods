@@ -1,18 +1,26 @@
 ﻿using System.Diagnostics;
 using ClozerWoods.Models;
+using ClozerWoods.Models.MainGate;
+using ClozerWoods.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClozerWoods.Controllers;
 public class MainGateController : Controller {
-    private readonly ILogger<MainGateController> _logger;
+    private IPageRepository _pageRepo;
+    private SharedViewModel _layoutViewModel;
 
-    public MainGateController(ILogger<MainGateController> logger) {
-        _logger = logger;
+    public MainGateController(IPageRepository pageRepo) {
+        _pageRepo = pageRepo;
+        _layoutViewModel = new SharedViewModel {
+            PublishedPages = _pageRepo.Pages
+                             .OrderBy(x => x.Title)
+                             .Where(p => p.Published)
+        };
     }
 
     [Route("")]
     public IActionResult Index() {
-        return View();
+        return View(_layoutViewModel);
     }
 
     [Route("Error")]
