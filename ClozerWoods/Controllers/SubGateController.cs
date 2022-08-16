@@ -74,7 +74,6 @@ namespace ClozerWoods.Controllers {
             var model = new PageViewModel {
                 PageListItems = GetPagesForSelect(pageId),
                 SelectedPage = selected,
-                PublishedPages = null,
             };
 
             return View(model);
@@ -104,7 +103,6 @@ namespace ClozerWoods.Controllers {
             var model = new PageViewModel {
                 PageListItems = GetPagesForSelect(pageId),
                 SelectedPage = modified,
-                PublishedPages = null,
             };
 
             return View("EditPage", model);
@@ -125,7 +123,6 @@ namespace ClozerWoods.Controllers {
             var model = new GalleryViewModel {
                 GalleryListItems = GetGalleriesForSelect(galleryId),
                 SelectedGallery = selected,
-                PublishedPages = null,
             };
 
             return View(model);
@@ -153,7 +150,6 @@ namespace ClozerWoods.Controllers {
             var model = new GalleryViewModel {
                 GalleryListItems = GetGalleriesForSelect(galleryId),
                 SelectedGallery = modified,
-                PublishedPages = null,
             };
 
             return View("EditGallery", model);
