@@ -1,0 +1,33 @@
+﻿@using ClozerWoods.Models.ViewModels.SubGate
+@model GalleryViewModel
+@{
+    Layout = "../Shared/_DashboardLayout.cshtml";
+    ViewData["Title"] = "Edit Gallery";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        window.onload = () => {
+            const galleryId = document.getElementById('galleryId');
+            if(galleryId != null) {
+                galleryId.onchange = () => {
+                    var url = location.protocol + '//' + location.host + location.pathname;
+                    if(galleryId.value != "") {
+                        url += '?galleryId=' + galleryId.value;
+                    }
+                    location.href = url;
+                }
+            }
+        }
+    </script>
+}
+
+<form method="post" asp-controller="SubGate" asp-action="EditGallery">
+    @if(Model.GalleryListItems!.Any()) {
+        <label for="id">Gallery</label>
+        <select name="galleryId" id="galleryId" asp-items="Model.GalleryListItems"></select>
+    }
+    <label for="title">Title</label>
+    <input type="text" name="title" value="@Model.SelectedGallery!.Title" />
+    <input type="submit" name="submit" value="Save" /> 
+</form>

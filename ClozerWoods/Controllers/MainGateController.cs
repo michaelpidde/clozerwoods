@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics;
-using ClozerWoods.Models;
-using ClozerWoods.Models.MainGate;
+using ClozerWoods.Models.ViewModels;
 using ClozerWoods.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClozerWoods.Controllers;
 public class MainGateController : Controller {
-    private IPageRepository _pageRepo;
-    private SharedViewModel _layoutViewModel;
+    private readonly IPageRepository _pageRepo;
+    private readonly SharedViewModel _layoutViewModel;
 
     public MainGateController(IPageRepository pageRepo) {
         _pageRepo = pageRepo;

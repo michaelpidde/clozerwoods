@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using ClozerWoods.Models.SubGate;
+using ClozerWoods.Models.ViewModels.SubGate;
 using ClozerWoods.Models.Entities;
 using ClozerWoods.Models.Repositories;
 using Microsoft.AspNetCore.Authentication;
@@ -9,22 +9,26 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using ClozerWoods.Models.MainGate;
+using ClozerWoods.Models.ViewModels;
 
 namespace ClozerWoods.Controllers {
     [Route("subgate")]
     public class SubGateController : Controller {
-        private IUserRepository _userRepo;
-        private IPageRepository _pageRepo;
+        private readonly IGalleryRepository _galleryRepo;
+        private readonly IPageRepository _pageRepo;
+        private readonly IUserRepository _userRepo;
 
-        public SubGateController(IUserRepository userRepo, IPageRepository pageRepo) {
-            _userRepo = userRepo;
+        public SubGateController(IGalleryRepository galleryRepo,
+                                 IPageRepository pageRepo,
+                                 IUserRepository userRepo) {
+            _galleryRepo = galleryRepo;
             _pageRepo = pageRepo;
+            _userRepo = userRepo;
         }
 
         [HttpGet("login")]
         public IActionResult Login() {
-            return View();
+            return View(new SharedViewModel());
         }
 
         [HttpPost("login")]
@@ -67,10 +71,10 @@ namespace ClozerWoods.Controllers {
                 }
             }
 
-            var model = new PagesViewModel {
+            var model = new PageViewModel {
                 PageListItems = GetPagesForSelect(pageId),
                 SelectedPage = selected,
-                PublishedPages = new List<Page>(),
+                PublishedPages = null,
             };
 
             return View(model);
@@ -86,7 +90,6 @@ namespace ClozerWoods.Controllers {
                     Title = title,
                     Published = published.Any(),
                     Created = DateTime.Now,
-                    Updated = DateTime.Now,
                 });
                 pageId = modified.Id;
             } else {
@@ -98,13 +101,76 @@ namespace ClozerWoods.Controllers {
                 });
             }
 
-            var model = new PagesViewModel {
+            var model = new PageViewModel {
                 PageListItems = GetPagesForSelect(pageId),
                 SelectedPage = modified,
-                PublishedPages = new List<Page>(),
+                PublishedPages = null,
             };
 
             return View("EditPage", model);
+        }
+
+        [Authorize]
+        [HttpGet("editgallery")]
+        public IActionResult EditGallery(int? galleryId = null) {
+            var selected = new Gallery();
+            if(galleryId != null) {
+                try {
+                    selected = _galleryRepo.Get((int)galleryId);
+                } catch(GalleryNotFoundException) {
+                    // TODO: Log this or something
+                }
+            }
+
+            var model = new GalleryViewModel {
+                GalleryListItems = GetGalleriesForSelect(galleryId),
+                SelectedGallery = selected,
+                PublishedPages = null,
+            };
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost("editgallery")]
+        public IActionResult EditGalleryAction(string title, int? galleryId = null) {
+            Gallery modified;
+
+            if(galleryId == null) {
+                modified = _galleryRepo.Add(new Gallery {
+                    Title = title,
+                    Created = DateTime.Now,
+                });
+                galleryId = modified.Id;
+            } else {
+                modified = _galleryRepo.Update(new Gallery {
+                    Title = title,
+                    Id = (int)galleryId,
+                    Updated = DateTime.Now,
+                });
+            }
+
+            var model = new GalleryViewModel {
+                GalleryListItems = GetGalleriesForSelect(galleryId),
+                SelectedGallery = modified,
+                PublishedPages = null,
+            };
+
+            return View("EditGallery", model);
+        }
+
+        private IEnumerable<SelectListItem> GetGalleriesForSelect(int? galleryId = -1) {
+            var list = _galleryRepo.Galleries
+                       .OrderBy(gallery => gallery.Title)
+                       .Select(g => new SelectListItem {
+                           Value = g.Id.ToString(),
+                           Text = g.Title,
+                           Selected = g.Id == galleryId,
+                       });
+            return list.Prepend(new SelectListItem {
+                Value = "",
+                Text = "* New",
+            });
         }
 
         private IEnumerable<SelectListItem> GetPagesForSelect(int? pageId = -1) {

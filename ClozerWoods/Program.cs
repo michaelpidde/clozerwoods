@@ -8,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 services.AddControllersWithViews();
 services.AddDbContext<ApplicationDbContext>();
-services.AddTransient<IUserRepository, UserRepository>();
+services.AddTransient<IGalleryRepository, GalleryRepository>();
 services.AddTransient<IPageRepository, PageRepository>();
+services.AddTransient<IUserRepository, UserRepository>();
 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
