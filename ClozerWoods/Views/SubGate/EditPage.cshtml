@@ -8,16 +8,7 @@
 @section scripts {
     <script type="text/javascript">
         window.onload = () => {
-            const pageId = document.getElementById('pageId');
-            if(pageId != null) {
-                pageId.onchange = () => {
-                    var url = location.protocol + '//' + location.host + location.pathname;
-                    if(pageId.value != "") {
-                        url += '?pageId=' + pageId.value;
-                    }
-                    location.href = url;
-                }
-            }
+            attachItemSwitchEvent('pageId');
         }
     </script>
 }

@@ -8,16 +8,7 @@
 @section scripts {
     <script type="text/javascript">
         window.onload = () => {
-            const galleryId = document.getElementById('galleryId');
-            if(galleryId != null) {
-                galleryId.onchange = () => {
-                    var url = location.protocol + '//' + location.host + location.pathname;
-                    if(galleryId.value != "") {
-                        url += '?galleryId=' + galleryId.value;
-                    }
-                    location.href = url;
-                }
-            }
+            attachItemSwitchEvent('galleryId');
         }
     </script>
 }
