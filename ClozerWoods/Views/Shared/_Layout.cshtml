@@ -12,7 +12,7 @@
 </head>
 <body>
     @if(Model.PublishedPages != null && Model.PublishedPages.Any()) {
-        <header>
+        <header class="rounded">
             <nav>
                 <ul>
                     <li><a asp-area="" asp-controller="MainGate" asp-action="Index">Home</a></li>
@@ -26,14 +26,10 @@
         </header>
     }
 
-    <main>
+    <main class="rounded">
         @RenderBody()
         <div class="clear"></div>
     </main>
-
-    <footer>
-        &copy; 2022 - Clozer Woods
-    </footer>
 
     @RenderSection("scripts", false)
 </body>

@@ -3,7 +3,7 @@
 }
 
 <h1>Clozer Woods Sub-Gate - @ViewData["Title"]</h1>
-<aside>
+<aside class="rounded">
     <ul>
         <li><a asp-area="" asp-controller="SubGate" asp-action="EditPage">Pages</a></li>
         <li><a asp-area="" asp-controller="SubGate" asp-action="EditGallery">Galleries</a></li>
@@ -11,7 +11,9 @@
     </ul>
 </aside>
 
-@RenderBody()
+<content class="rounded">
+    @RenderBody()
+</content>
 
 @section scripts {
     <script src="~/js/main.js" asp-append-version="true"></script>

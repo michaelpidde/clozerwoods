@@ -14,8 +14,13 @@ body {
     font-family: Verdana;
 }
 
+.rounded {
+    border-radius: 6px;
+}
+
 header {
-    margin: 10px;
+    width: 1024px;
+    margin: 10px auto;
     padding: 10px;
     border: var(--border-style);
     background-color: var(--primary-color);
@@ -38,7 +43,8 @@ h1 {
 }
 
 main {
-    margin: 10px;
+    width: 1024px;
+    margin: 10px auto;
     padding: 10px;
     border: var(--border-style);
     background-color: var(--primary-color);
@@ -46,12 +52,22 @@ main {
 
 aside {
     float: left;
-    width: 200px;
+    width: 160px;
     padding: 10px;
-    margin: 10px 30px 10px 10px;
+    margin: 10px;
     border: var(--border-style);
     background-color: var(--secondary-color);
     font-size: 80%;
+}
+
+content {
+    float: right;
+    width: 780px;
+    padding: 10px;
+    margin: 10px 10px 10px 0;
+    border: var(--border-style);
+    background-color: #ffffff;
+    font-size: 90%;
 }
 
 .clear {
