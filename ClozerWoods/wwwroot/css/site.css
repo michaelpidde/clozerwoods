@@ -1,7 +1,8 @@
 :root {
     --primary-color: #c7dc8e;
     --border-style: 1px solid #000000;
-    --secondary-color: #cccccc;
+    --secondary-color: #a7beb0;
+    --accent-color: #8ca5a1;
 }
 
 html {
@@ -23,7 +24,7 @@ header {
     margin: 10px auto;
     padding: 10px;
     border: var(--border-style);
-    background-color: var(--primary-color);
+    background-color: var(--accent-color);
 }
 
 nav ul {
@@ -67,7 +68,7 @@ content {
     margin: 10px 10px 10px 0;
     border: var(--border-style);
     background-color: #ffffff;
-    font-size: 90%;
+    font-size: 80%;
 }
 
 .clear {
@@ -85,6 +86,8 @@ label:after {
 input, select {
     display: block;
     margin-bottom: 10px;
+    border: var(--border-style);
+    border-radius: 4px;
 }
 
 submit {
