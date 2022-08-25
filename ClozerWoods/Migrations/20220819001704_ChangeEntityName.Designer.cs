@@ -3,6 +3,7 @@ using System;
 using ClozerWoods.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClozerWoods.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220819001704_ChangeEntityName")]
+    partial class ChangeEntityName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,9 +23,9 @@ namespace ClozerWoods.Migrations
 
             modelBuilder.Entity("ClozerWoods.Models.Entities.Gallery", b =>
                 {
-                    b.Property<uint>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -42,9 +44,9 @@ namespace ClozerWoods.Migrations
 
             modelBuilder.Entity("ClozerWoods.Models.Entities.MediaItem", b =>
                 {
-                    b.Property<uint>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -57,8 +59,8 @@ namespace ClozerWoods.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<uint>("GalleryId")
-                        .HasColumnType("int unsigned");
+                    b.Property<int>("GalleryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -74,18 +76,12 @@ namespace ClozerWoods.Migrations
 
             modelBuilder.Entity("ClozerWoods.Models.Entities.Page", b =>
                 {
-                    b.Property<uint>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("longtext");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<uint?>("ParentId")
-                        .HasColumnType("int unsigned");
 
                     b.Property<bool>("Published")
                         .HasColumnType("tinyint(1)");
@@ -104,9 +100,9 @@ namespace ClozerWoods.Migrations
 
             modelBuilder.Entity("ClozerWoods.Models.Entities.User", b =>
                 {
-                    b.Property<uint>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()

@@ -23,5 +23,5 @@ public class ApplicationDbContext : DbContext {
     public DbSet<User>? Users { get; set; }
     public DbSet<Page>? Pages { get; set; }
     public DbSet<Gallery>? Galleries { get; set; }
-    public DbSet<GalleryItem>? GalleryItems { get; set; }
+    public DbSet<MediaItem>? MediaItems { get; set; }
 }

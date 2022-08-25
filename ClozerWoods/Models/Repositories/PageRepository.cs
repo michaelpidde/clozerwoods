@@ -11,7 +11,7 @@ public class PageRepository : IPageRepository {
 
     public IEnumerable<Page> Pages => _context.Pages;
 
-    public Page Get(int id) {
+    public Page Get(uint id) {
         Page? page = null;
         if(Pages != null) {
             page = Pages.FirstOrDefault(x => x.Id == id);
@@ -48,6 +48,8 @@ public class PageRepository : IPageRepository {
         }
         if(toUpdate != null) {
             toUpdate.Title = page.Title;
+            toUpdate.Content = page.Content;
+            toUpdate.ParentId = page.ParentId;
             toUpdate.Published = page.Published;
             _context.SaveChanges();
         }

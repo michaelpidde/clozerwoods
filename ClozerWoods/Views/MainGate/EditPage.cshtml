@@ -1,4 +1,4 @@
-﻿@using ClozerWoods.Models.ViewModels.SubGate
+﻿@using ClozerWoods.Models.ViewModels.MainGate
 @model PageViewModel
 @{
     Layout = "../Shared/_DashboardLayout.cshtml";
@@ -13,13 +13,23 @@
     </script>
 }
 
-<form method="post" asp-controller="SubGate" asp-action="EditPage">
-    @if(Model.PageListItems!.Any()) {
+<form method="post" asp-controller="MainGate" asp-action="EditPage">
+    @if(Model.PageList!.Any()) {
         <label for="id">Page</label>
-        <select name="pageId" id="pageId" asp-items="Model.PageListItems"></select>
+        <select name="pageId" id="pageId" asp-items="Model.PageList"></select>
     }
+
     <label for="title">Title</label>
     <input type="text" name="title" value="@Model.SelectedPage!.Title" />
+
+    <label for="content">Content</label>
+    <textarea name="content">@Model.SelectedPage!.Content</textarea>
+
+    @if(Model.ParentPageList!.Any()) {
+        <label for="parentId">Parent</label>
+        <select name="parentId" id="parentId" asp-items="Model.ParentPageList"></select>
+    }
+
     <label for="published">Published</label>
     @{
         var published = "";
@@ -28,5 +38,6 @@
         }
     }
     <input type="checkbox" name="published" @published />
+
     <input type="submit" name="submit" value="Save" />
 </form>

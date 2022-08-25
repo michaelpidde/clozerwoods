@@ -16,7 +16,7 @@ public class GalleryRepository : IGalleryRepository {
         return Get(gallery.Title);
     }
 
-    public Gallery Get(int id) {
+    public Gallery Get(uint id) {
         Gallery? gallery = null;
         if(Galleries != null) {
             gallery = Galleries.FirstOrDefault(x => x.Id == id);

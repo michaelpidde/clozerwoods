@@ -9,6 +9,7 @@ var services = builder.Services;
 services.AddControllersWithViews();
 services.AddDbContext<ApplicationDbContext>();
 services.AddTransient<IGalleryRepository, GalleryRepository>();
+services.AddTransient<IMediaItemRepository, MediaItemRepository>();
 services.AddTransient<IPageRepository, PageRepository>();
 services.AddTransient<IUserRepository, UserRepository>();
 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -16,7 +17,7 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     {
         options.ExpireTimeSpan = TimeSpan.FromDays(1);
         options.SlidingExpiration = true;
-        options.LoginPath = "/subgate/login";
+        options.LoginPath = "/maingate/login";
     });
 
 var app = builder.Build();
