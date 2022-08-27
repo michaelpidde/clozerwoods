@@ -15,7 +15,7 @@
 
 <form method="post" asp-controller="MainGate" asp-action="EditPage">
     @if(Model.PageList!.Any()) {
-        <label for="id">Page</label>
+        <label for="pageId">Page</label>
         <select name="pageId" id="pageId" asp-items="Model.PageList"></select>
     }
 

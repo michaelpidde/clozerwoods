@@ -15,7 +15,7 @@
 
 <form method="post" asp-controller="MainGate" asp-action="EditGallery">
     @if(Model.GalleryList!.Any()) {
-        <label for="id">Gallery</label>
+        <label for="galleryId">Gallery</label>
         <select name="galleryId" id="galleryId" asp-items="Model.GalleryList"></select>
     }
     <label for="title">Title</label>

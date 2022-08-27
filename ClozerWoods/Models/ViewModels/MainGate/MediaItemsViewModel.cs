@@ -5,5 +5,6 @@ namespace ClozerWoods.Models.ViewModels.MainGate;
 
 public class MediaItemsViewModel : SharedViewModel {
     public MediaItem? SelectedMediaItem { get; init; }
-    public IEnumerable<MediaItem>? MediaItemList { get; init; }
+    public IEnumerable<SelectListItem>? MediaItemList { get; init; }
+    public IEnumerable<SelectListItem>? GalleryList { get; init; }
 }
