@@ -93,3 +93,42 @@ input, select {
 submit {
     display: block;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    grid-auto-rows: minmax(20px, auto);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.grid > div {
+    background: #eee;
+    padding: 3px;
+}
+.grid .alt {
+    background: #e3e3e3;
+}
+.grid .title {
+    background: #ccc;
+    font-weight: bold;
+}
+
+.grid .thumbPreview {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    border: 1px solid #000000;
+    background: #ffffff;
+    padding: 10px;
+}
+
+form .thumbPreview {
+    float: right;
+}
+
+p.notice {
+    border: 1px solid #b57979;
+    background-color: #e5a5a5;
+    padding: 6px;
+}

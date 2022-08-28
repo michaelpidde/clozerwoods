@@ -198,7 +198,7 @@ namespace ClozerWoods.Controllers {
 
         [Authorize]
         [HttpGet("editmediaitem")]
-        public IActionResult EditMediaItem(uint? mediaItemId = null) {
+        public IActionResult EditMediaItem(uint? mediaItemId = null, bool modified = false) {
             var selected = new MediaItem();
             if(mediaItemId != null) {
                 try {
@@ -209,9 +209,11 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new MediaItemsViewModel {
-                MediaItemList = _mediaItemRepo.GetForSelect(mediaItemId),
-                SelectedMediaItem = selected,
+                MediaUrl = _config["MediaUrl"],
+                MediaItemList = _mediaItemRepo.MediaItems,
+                SelectedMediaItem = (mediaItemId == null) ? null : selected,
                 GalleryList = _galleryRepo.GetForSelect(selected.GalleryId, "* Select"),
+                Modified = modified
             };
 
             return View(model);
@@ -284,7 +286,6 @@ namespace ClozerWoods.Controllers {
                     GalleryId = galleryId,
                     Created = DateTime.Now,
                 });
-                mediaItemId = modified.Id;
             } else {
                 modified = _mediaItemRepo.Update(new MediaItem {
                     Title = title,
@@ -297,13 +298,7 @@ namespace ClozerWoods.Controllers {
                 });
             }
 
-            var model = new MediaItemsViewModel {
-                MediaItemList = _mediaItemRepo.GetForSelect(mediaItemId),
-                SelectedMediaItem = modified,
-                GalleryList = _galleryRepo.GetForSelect(galleryId, "* Select"),
-            };
-
-            return View("EditMediaItem", model);
+            return RedirectToAction("EditMediaItem", new { mediaItemId = modified.Id, modified = true });
         }
     }
 }

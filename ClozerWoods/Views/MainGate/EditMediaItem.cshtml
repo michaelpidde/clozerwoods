@@ -8,58 +8,105 @@
 @section scripts {
     <script type="text/javascript">
         window.onload = () => {
-            attachItemSwitchEvent('mediaItemId');
+            if(document.querySelector('form') == null) {
 
-            document.querySelector('#selectedFile').onchange = function() {
-                const container = document.querySelector('#forceUniqueNameContainer');
-                const clear = document.querySelector('#clearSelectedFile');
-                if(this.value !== '') {
-                    container.style.display = 'block';
-                    clear.style.display = 'inline-block';
-                } else {
-                    container.style.display = 'none';
+                document.querySelectorAll('.col-thumb a').forEach(thumb => {
+                    generateThumbnailPreview(thumb);
+                    thumb.addEventListener('mouseover', function(e) {
+                        showThumbnailPreview(thumb);
+                    });
+                    thumb.addEventListener('mouseout', function(e) {
+                        hideThumbnailPreview(thumb);
+                    });
+                    thumb.addEventListener('click', function(e) {
+                        e.preventDefault();
+                    });
+                });
+
+            } else {
+
+                document.querySelector('#selectedFile').onchange = function() {
+                    const container = document.querySelector('#forceUniqueNameContainer');
+                    const clear = document.querySelector('#clearSelectedFile');
+                    if(this.value !== '') {
+                        container.style.display = 'block';
+                        clear.style.display = 'inline-block';
+                    } else {
+                        container.style.display = 'none';
+                    }
                 }
-            }
 
-            document.querySelector('#clearSelectedFile').onclick = function() {
-                document.querySelector('#selectedFile').value = '';
-                this.style.display = 'none';
+                document.querySelector('#clearSelectedFile').onclick = function() {
+                    document.querySelector('#selectedFile').value = '';
+                    this.style.display = 'none';
+                }
+
             }
         }
     </script>
 }
 
-<form method="post" asp-controller="MainGate" asp-action="EditMediaItem" enctype="multipart/form-data">
-    @if(Model.MediaItemList!.Any()) {
-        <label for="mediaItemId">Media Item</label>
-        <select name="mediaItemId" id="mediaItemId" asp-items="Model.MediaItemList"></select>
-    }
+@if(Model.Modified) {
+    <p class="notice">Media item saved.</p>
+}
 
-    @if(Model.SelectedMediaItem.FileName == null) {
-        <input type="hidden" name="hasExistingFile" value="false">
-    } else {
-        <input type="hidden" name="hasExistingFile" value="true">
-        <p>@Model.SelectedMediaItem.FileName</p>
-    }
-    <label for="selectedFile">File</label>
-    <span id="clearSelectedFile" style="display: none;">(<a href="#">clear</a>)</span>
-    <input type="file" name="selectedFile" id="selectedFile" />
-    
-    <div id="forceUniqueNameContainer" style="display: none;">
-        <label for="forceUniqueName">Force Unique Name</label>
-        <input type="checkbox" name="forceUniqueName" />
+@if(Model.SelectedMediaItem == null) {
+
+    <div class="grid">
+        <div class="title">Id</div>
+        <div class="title">Title</div>
+        <div class="title">Description</div>
+        <div class="title">Thumbnail</div>
+        @if(Model.MediaItemList!.Any()) {
+            string alt = "";
+            foreach(var item in Model.MediaItemList!) {
+                <div class="col-id @(alt)"><a href="editmediaitem?mediaItemId=@(item.Id)">@(item.Id)</a></div>
+                <div class="col-title @(alt)">@(item.Title)</div>
+                <div class="col-desc @(alt)">@(item.Description)</div>
+                <div class="col-thumb @(alt)"><a href="@(Model.MediaUrl + item.Thumbnail)">View</a></div>
+                alt = (alt == "") ? "alt" : "";
+            }
+        } else {
+            <div>There are no media items.</div>
+        }
     </div>
 
-    @if(Model.GalleryList!.Any()) {
-        <label for="galleryId">Gallery</label>
-        <select name="galleryId" asp-items="Model.GalleryList"></select>
-    }
+} else {
 
-    <label for="title">Title</label>
-    <input type="text" name="title" value="@Model.SelectedMediaItem!.Title" />
+    <form method="post" asp-controller="MainGate" asp-action="EditMediaItem" enctype="multipart/form-data">
+        <input type="hidden" name="mediaItemId" value="@Model.SelectedMediaItem.Id">
 
-    <label for="description">Description</label>
-    <input type="text" name="description" value="@Model.SelectedMediaItem!.Description" />
+        @if(Model.SelectedMediaItem.FileName == null) {
+            <input type="hidden" name="hasExistingFile" value="false">
+        } else {
+            <input type="hidden" name="hasExistingFile" value="true">
+            <p>@Model.SelectedMediaItem.FileName</p>
+            <div class="thumbPreview">
+                <img src="@(Model.MediaUrl + Model.SelectedMediaItem.Thumbnail)">
+            </div>
+        }
 
-    <input type="submit" name="submit" value="Save" /> 
-</form>
+        <label for="selectedFile">File</label>
+        <span id="clearSelectedFile" style="display: none;">(<a href="#">clear</a>)</span>
+        <input type="file" name="selectedFile" id="selectedFile" />
+    
+        <div id="forceUniqueNameContainer" style="display: none;">
+            <label for="forceUniqueName">Force Unique Name</label>
+            <input type="checkbox" name="forceUniqueName" />
+        </div>
+
+        @if(Model.GalleryList!.Any()) {
+            <label for="galleryId">Gallery</label>
+            <select name="galleryId" asp-items="Model.GalleryList"></select>
+        }
+
+        <label for="title">Title</label>
+        <input type="text" name="title" value="@Model.SelectedMediaItem!.Title" />
+
+        <label for="description">Description</label>
+        <input type="text" name="description" value="@Model.SelectedMediaItem!.Description" />
+
+        <input type="submit" name="submit" value="Save" />
+    </form>
+
+}
