@@ -1,4 +1,5 @@
 ﻿using ClozerWoods.Models.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ClozerWoods.Models.Repositories;
 
@@ -31,6 +32,20 @@ public class PageRepository : IPageRepository {
             throw new PageNotFoundException();
         }
         return page;
+    }
+
+    public IEnumerable<SelectListItem> GetForSelect(uint? pageId = null, string? defaultItemLabel = "* New") {
+        var list = Pages
+                   .OrderBy(page => page.Title)
+                   .Select(p => new SelectListItem {
+                       Value = p.Id.ToString(),
+                       Text = p.Title,
+                       Selected = p.Id == pageId,
+                   });
+        return list.Prepend(new SelectListItem {
+            Value = "",
+            Text = defaultItemLabel,
+        });
     }
 
     public Page Add(Page page) {

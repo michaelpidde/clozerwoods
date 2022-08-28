@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ClozerWoods.Models.ViewModels;
+using ClozerWoods.Services;
 
 namespace ClozerWoods.Controllers {
     [Route("maingate")]
@@ -19,6 +19,7 @@ namespace ClozerWoods.Controllers {
         private readonly IMediaItemRepository _mediaItemRepo;
         private readonly IPageRepository _pageRepo;
         private readonly IUserRepository _userRepo;
+        private readonly MainGateService _service;
 
 
         public MainGateController(
@@ -33,6 +34,7 @@ namespace ClozerWoods.Controllers {
             _mediaItemRepo = mediaItemRepo;
             _pageRepo = pageRepo;
             _userRepo = userRepo;
+            _service = new MainGateService();
         }
 
 
@@ -91,8 +93,8 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new PageViewModel {
-                PageList = GetPagesForSelect(pageId),
-                ParentPageList = GetPagesForSelect(null, "* Select"),
+                PageList = _pageRepo.GetForSelect(pageId),
+                ParentPageList = _pageRepo.GetForSelect(null, "* Select"),
                 SelectedPage = selected,
             };
 
@@ -133,8 +135,8 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new PageViewModel {
-                PageList = GetPagesForSelect(pageId),
-                ParentPageList = GetPagesForSelect(parentId, "* Select"),
+                PageList = _pageRepo.GetForSelect(pageId),
+                ParentPageList = _pageRepo.GetForSelect(parentId, "* Select"),
                 SelectedPage = modified,
             };
 
@@ -156,7 +158,7 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new GalleryViewModel {
-                GalleryList = GetGalleriesForSelect(galleryId),
+                GalleryList = _galleryRepo.GetForSelect(galleryId),
                 SelectedGallery = selected,
             };
 
@@ -185,7 +187,7 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new GalleryViewModel {
-                GalleryList = GetGalleriesForSelect(galleryId),
+                GalleryList = _galleryRepo.GetForSelect(galleryId),
                 SelectedGallery = modified,
             };
 
@@ -207,9 +209,9 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new MediaItemsViewModel {
-                MediaItemList = GetMediaItemsForSelect(mediaItemId),
+                MediaItemList = _mediaItemRepo.GetForSelect(mediaItemId),
                 SelectedMediaItem = selected,
-                GalleryList = GetGalleriesForSelect(selected.GalleryId, "* Select"),
+                GalleryList = _galleryRepo.GetForSelect(selected.GalleryId, "* Select"),
             };
 
             return View(model);
@@ -231,27 +233,38 @@ namespace ClozerWoods.Controllers {
             string mediaFolder = _config["MediaFolder"];
 
             if(!Directory.Exists(mediaFolder)) {
+                // TODO: Catch this and handle it gracefully
                 throw new Exception("Media folder does not exist.");
             }
 
             string fileName;
             MediaItem? saved = null;
+            string thumbnail;
             if(hasExistingFile) {
                 saved = _mediaItemRepo.Get((uint)mediaItemId!);
             }
 
+            List<string> allowedExtensions = _config.GetSection("ValidMediaExtensions").Get<List<string>>();
+
             if(selectedFile != null) {
-                if(hasExistingFile) {
-                    System.IO.File.Delete(mediaFolder + Path.DirectorySeparatorChar + saved.FileName);
+                if(!allowedExtensions.Contains(Path.GetExtension(selectedFile.FileName.ToLower()))) {
+                    // TODO: Catch this and handle it gracefully
+                    throw new Exception("Invalid media item extension.");
                 }
 
-                string uniqueChunk = (forceUniqueName.Any()) ? UniqueString() : "";
-                fileName = uniqueChunk + selectedFile.FileName;
+                if(hasExistingFile) {
+                    System.IO.File.Delete(mediaFolder + Path.DirectorySeparatorChar + saved!.FileName);
+                    System.IO.File.Delete(mediaFolder + Path.DirectorySeparatorChar + saved!.Thumbnail);
+                }
+
+                fileName = (forceUniqueName.Any() ? _service.UniqueString() : "") + selectedFile.FileName;
                 string fullPath = mediaFolder + Path.DirectorySeparatorChar + fileName;
                 using var stream = System.IO.File.Create(fullPath);
                 selectedFile.CopyTo(stream);
+                thumbnail = _service.GenerateThumbnail(stream, mediaFolder, fileName);
             } else {
                 fileName = (saved != null) ? saved.FileName : "";
+                thumbnail = (saved != null) ? saved.Thumbnail : "";
             }
 
             MediaItem modified;
@@ -261,6 +274,7 @@ namespace ClozerWoods.Controllers {
                     Title = title,
                     Description = description,
                     FileName = fileName,
+                    Thumbnail = thumbnail,
                     GalleryId = galleryId,
                     Created = DateTime.Now,
                 });
@@ -270,6 +284,7 @@ namespace ClozerWoods.Controllers {
                     Title = title,
                     Description = description,
                     FileName = fileName,
+                    Thumbnail = thumbnail,
                     GalleryId= galleryId,
                     Id = (uint)mediaItemId,
                     Updated = DateTime.Now,
@@ -277,74 +292,12 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new MediaItemsViewModel {
-                MediaItemList = GetMediaItemsForSelect(mediaItemId),
+                MediaItemList = _mediaItemRepo.GetForSelect(mediaItemId),
                 SelectedMediaItem = modified,
-                GalleryList = GetGalleriesForSelect(galleryId, "* Select"),
+                GalleryList = _galleryRepo.GetForSelect(galleryId, "* Select"),
             };
 
             return View("EditMediaItem", model);
         }
-
-
-
-        private IEnumerable<SelectListItem> GetGalleriesForSelect(
-            uint? galleryId = null,
-            string? defaultItemLabel = "* New"
-        ) {
-            var list = _galleryRepo.Galleries
-                       .OrderBy(gallery => gallery.Title)
-                       .Select(g => new SelectListItem {
-                           Value = g.Id.ToString(),
-                           Text = g.Title,
-                           Selected = g.Id == galleryId,
-                       });
-            return list.Prepend(new SelectListItem {
-                Value = "",
-                Text = defaultItemLabel,
-            });
-        }
-
-
-
-        private IEnumerable<SelectListItem> GetPagesForSelect(
-            uint? pageId = null,
-            string? defaultItemLabel = "* New"
-        ) {
-            var list = _pageRepo.Pages
-                       .OrderBy(page => page.Title)
-                       .Select(p => new SelectListItem {
-                           Value = p.Id.ToString(),
-                           Text = p.Title,
-                           Selected = p.Id == pageId,
-                       });
-            return list.Prepend(new SelectListItem {
-                Value = "",
-                Text = defaultItemLabel,
-            });
-        }
-
-
-
-        private IEnumerable<SelectListItem> GetMediaItemsForSelect(uint? mediaItemId = null) {
-            var list = _mediaItemRepo.MediaItems
-                       .OrderBy(m => m.Title)
-                       .Select(m=> new SelectListItem {
-                           Value = m.Id.ToString(),
-                           Text = m.Title,
-                           Selected = m.Id == mediaItemId,
-                       });
-            return list.Prepend(new SelectListItem {
-                Value = "",
-                Text = "* New",
-            });
-        }
-
-
-
-        private string UniqueString() => Convert.ToBase64String(Guid.NewGuid().ToByteArray())
-            .Replace("-", "")
-            .Replace("+", "")
-            .Replace("=", "")
-            .Replace("/", "");
     }
 }

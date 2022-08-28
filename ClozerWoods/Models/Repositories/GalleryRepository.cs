@@ -1,4 +1,5 @@
 ﻿using ClozerWoods.Models.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ClozerWoods.Models.Repositories;
 
@@ -36,6 +37,20 @@ public class GalleryRepository : IGalleryRepository {
             throw new GalleryNotFoundException();
         }
         return gallery;
+    }
+
+    public IEnumerable<SelectListItem> GetForSelect(uint? galleryId = null, string? defaultItemLabel = "* New") {
+        var list = Galleries
+                   .OrderBy(gallery => gallery.Title)
+                   .Select(g => new SelectListItem {
+                       Value = g.Id.ToString(),
+                       Text = g.Title,
+                       Selected = g.Id == galleryId,
+                   });
+        return list.Prepend(new SelectListItem {
+            Value = "",
+            Text = defaultItemLabel,
+        });
     }
 
     public Gallery Update(Gallery gallery) {
