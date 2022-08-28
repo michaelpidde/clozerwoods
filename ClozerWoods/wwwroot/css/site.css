@@ -75,6 +75,9 @@ content {
     clear: both;
 }
 
+
+
+/* FORMS */
 label {
     display: block;
     font-weight: bold;
@@ -94,16 +97,15 @@ submit {
     display: block;
 }
 
+
+
+/* GRIDS */
 .grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 0;
     grid-auto-rows: minmax(20px, auto);
     border: 1px solid #ccc;
     border-radius: 3px;
-}
-.grid .no-media {
-    grid-column: 1 / span 4;
 }
 .grid > div {
     background: #eee;
@@ -117,6 +119,15 @@ submit {
     font-weight: bold;
 }
 
+
+
+/* MEDIA ITEMS */
+.grid.media {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid .no-media {
+    grid-column: 1 / span 4;
+}
 .grid .thumbPreview {
     display: none;
     position: absolute;
@@ -130,6 +141,19 @@ form .thumbPreview {
     float: right;
 }
 
+
+
+/* GALLERIES GRID */
+.grid.galleries {
+    grid-template-columns: repeat(3, 1fr);
+}
+.grid .no-galleries {
+    grid-column: 1 / span 3;
+}
+
+
+
+/* GRID CONTROLS */
 p.notice {
     border: 1px solid #b57979;
     background-color: #e5a5a5;

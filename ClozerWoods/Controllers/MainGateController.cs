@@ -39,6 +39,7 @@ namespace ClozerWoods.Controllers {
 
 
 
+        #region Auth
         [HttpGet("login")]
         public IActionResult Login() {
             return View(new SharedViewModel());
@@ -69,17 +70,21 @@ namespace ClozerWoods.Controllers {
 
             return RedirectToAction("dashboard");
         }
+        #endregion
 
 
 
+        #region Dashboard
         [Authorize]
         [Route("dashboard")]
         public IActionResult Dashboard() {
             return View(new SharedViewModel());
         }
+        #endregion
 
 
 
+        #region Pages
         [Authorize]
         [HttpGet("editpage")]
         public IActionResult EditPage(uint? pageId = null) {
@@ -145,12 +150,25 @@ namespace ClozerWoods.Controllers {
 
             return View("EditPage", model);
         }
+        #endregion
+
+
+
+        #region Galleries
+        [Authorize]
+        [HttpGet("galleries")]
+        public IActionResult ListGalleries(bool modified = false) {
+            return View(new ListGalleriesViewModel {
+                GalleryList = _galleryRepo.Galleries,
+                Modified = modified,
+            });
+        }
 
 
 
         [Authorize]
-        [HttpGet("editgallery")]
-        public IActionResult EditGallery(uint? galleryId = null) {
+        [HttpGet("editgallery/{galleryId?}")]
+        public IActionResult EditGallery(uint? galleryId = null, bool add = false) {
             var selected = new Gallery();
             if(galleryId != null) {
                 try {
@@ -163,6 +181,7 @@ namespace ClozerWoods.Controllers {
             var model = new GalleryViewModel {
                 GalleryList = _galleryRepo.GetForSelect(galleryId),
                 SelectedGallery = selected,
+                Add = add,
             };
 
             return View(model);
@@ -171,7 +190,7 @@ namespace ClozerWoods.Controllers {
 
 
         [Authorize]
-        [HttpPost("editgallery")]
+        [HttpPost("editgallery/{galleryId?}")]
         public IActionResult EditGalleryAction(string title, uint? galleryId = null) {
             Gallery modified;
 
@@ -196,9 +215,11 @@ namespace ClozerWoods.Controllers {
 
             return View("EditGallery", model);
         }
+        #endregion
 
 
 
+        #region Media Items
         [Authorize]
         [HttpGet("mediaitems")]
         public IActionResult ListMediaItems(bool modified = false) {
@@ -234,7 +255,7 @@ namespace ClozerWoods.Controllers {
 
 
         [Authorize]
-        [HttpPost("editmediaitem")]
+        [HttpPost("editmediaitem/{mediaItemId?}")]
         public IActionResult EditMediaItemAction(
             bool hasExistingFile,
             uint? galleryId,
@@ -310,5 +331,6 @@ namespace ClozerWoods.Controllers {
 
             return RedirectToAction("ListMediaItems", new { modified = true });
         }
+        #endregion
     }
 }

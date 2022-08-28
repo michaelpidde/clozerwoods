@@ -1,0 +1,29 @@
+﻿@using ClozerWoods.Models.ViewModels.MainGate
+@model ListGalleriesViewModel
+@{
+    Layout = "../Shared/_DashboardLayout.cshtml";
+    ViewData["Title"] = "Galleries";
+}
+
+@if(Model.Modified) {
+    <p class="notice">Gallery saved.</p>
+}
+
+<a id="new" asp-controller="MainGate" asp-action="EditGallery" asp-route-add="true">+</a>
+
+<div class="grid galleries">
+    <div class="title">Id</div>
+    <div class="title">Title</div>
+    <div class="title">Items</div>
+    @if(Model.GalleryList!.Any()) {
+        string alt = "";
+        foreach(var item in Model.GalleryList!) {
+            <div class="col-id @alt"><a asp-controller="MainGate" asp-action="EditGallery" asp-route-galleryId="@item.Id">@item.Id</a></div>
+            <div class="col-title @alt">@item.Title</div>
+            <div class="col-thumb @alt">@item.MediaItems.Count</div>
+            alt = (alt == "") ? "alt" : "";
+        }
+    } else {
+        <div class="no-galleries">There are no galleries.</div>
+    }
+</div>

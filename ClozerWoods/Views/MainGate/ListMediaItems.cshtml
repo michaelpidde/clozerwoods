@@ -2,7 +2,7 @@
 @model ListMediaItemsViewModel
 @{
     Layout = "../Shared/_DashboardLayout.cshtml";
-    ViewData["Title"] = "Edit Media Item";
+    ViewData["Title"] = "Media Items";
 }
 
 @section scripts {
@@ -30,7 +30,7 @@
 
 <a id="new" asp-controller="MainGate" asp-action="EditMediaItem" asp-route-add="true">+</a>
 
-<div class="grid">
+<div class="grid media">
     <div class="title">Id</div>
     <div class="title">Title</div>
     <div class="title">Description</div>
@@ -38,10 +38,10 @@
     @if(Model.MediaItemList!.Any()) {
         string alt = "";
         foreach(var item in Model.MediaItemList!) {
-            <div class="col-id @(alt)"><a href="editmediaitem?mediaItemId=@(item.Id)">@(item.Id)</a></div>
-            <div class="col-title @(alt)">@(item.Title)</div>
-            <div class="col-desc @(alt)">@(item.Description)</div>
-            <div class="col-thumb @(alt)"><a href="@(Model.MediaUrl + item.Thumbnail)">View</a></div>
+            <div class="col-id @alt"><a asp-action="EditMediaItem" asp-route-mediaItemId="@item.Id">@item.Id</a></div>
+            <div class="col-title @alt">@item.Title</div>
+            <div class="col-desc @alt">@item.Description</div>
+            <div class="col-thumb @alt"><a href="@(Model.MediaUrl + item.Thumbnail)">View</a></div>
             alt = (alt == "") ? "alt" : "";
         }
     } else {

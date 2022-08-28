@@ -10,13 +10,14 @@ public class GalleryRepository : IGalleryRepository {
     public GalleryRepository(ApplicationDbContext context) {
         _context = context;
     }
-    public IEnumerable<Gallery> Galleries => _context.Galleries;
+    public IEnumerable<Gallery> Galleries => _context.Galleries.Include(g => g.MediaItems).Select(x => x);
 
     public Gallery Add(Gallery gallery) {
         _context.Galleries.Add(gallery);
         _context.SaveChanges();
         return Get(gallery.Title);
     }
+
 
     public Gallery Get(uint id) {
         Gallery? gallery = null;
