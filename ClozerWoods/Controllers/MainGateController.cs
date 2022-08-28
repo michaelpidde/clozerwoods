@@ -86,7 +86,16 @@ namespace ClozerWoods.Controllers {
 
         #region Pages
         [Authorize]
-        [HttpGet("editpage")]
+        [HttpGet("pages")]
+        public IActionResult ListPages(bool modified = false) {
+            return View(new ListPagesViewModel {
+                PageList = _pageRepo.Pages,
+                Modified = modified,
+            });
+        }
+
+        [Authorize]
+        [HttpGet("editpage/{pageId?}")]
         public IActionResult EditPage(uint? pageId = null) {
             var selected = new Page();
             if(pageId != null) {
@@ -98,7 +107,6 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new PageViewModel {
-                PageList = _pageRepo.GetForSelect(pageId),
                 ParentPageList = _pageRepo.GetForSelect(null, "* Select"),
                 SelectedPage = selected,
             };
@@ -109,7 +117,7 @@ namespace ClozerWoods.Controllers {
 
 
         [Authorize]
-        [HttpPost("editpage")]
+        [HttpPost("editpage/{pageId?}")]
         public IActionResult EditPageAction(
             string stub,
             string title,
@@ -118,10 +126,8 @@ namespace ClozerWoods.Controllers {
             uint? pageId = null,
             uint? parentId = null
         ) {
-            Page modified;
-
             if(pageId == null) {
-                modified = _pageRepo.Add(new Page {
+                _ = _pageRepo.Add(new Page {
                     Stub = stub,
                     Title = title,
                     Content = content,
@@ -129,9 +135,8 @@ namespace ClozerWoods.Controllers {
                     Published = published.Any(),
                     Created = DateTime.Now,
                 });
-                pageId = modified.Id;
             } else {
-                modified = _pageRepo.Update(new Page {
+                _ = _pageRepo.Update(new Page {
                     Stub = stub,
                     Title = title,
                     Content = content,
@@ -142,13 +147,7 @@ namespace ClozerWoods.Controllers {
                 });
             }
 
-            var model = new PageViewModel {
-                PageList = _pageRepo.GetForSelect(pageId),
-                ParentPageList = _pageRepo.GetForSelect(parentId, "* Select"),
-                SelectedPage = modified,
-            };
-
-            return View("EditPage", model);
+            return RedirectToAction("ListPages", new { modified = true });
         }
         #endregion
 
@@ -178,13 +177,10 @@ namespace ClozerWoods.Controllers {
                 }
             }
 
-            var model = new GalleryViewModel {
-                GalleryList = _galleryRepo.GetForSelect(galleryId),
+            return View(new GalleryViewModel {
                 SelectedGallery = selected,
                 Add = add,
-            };
-
-            return View(model);
+            });
         }
 
 
@@ -192,28 +188,20 @@ namespace ClozerWoods.Controllers {
         [Authorize]
         [HttpPost("editgallery/{galleryId?}")]
         public IActionResult EditGalleryAction(string title, uint? galleryId = null) {
-            Gallery modified;
-
             if(galleryId == null) {
-                modified = _galleryRepo.Add(new Gallery {
+                _ = _galleryRepo.Add(new Gallery {
                     Title = title,
                     Created = DateTime.Now,
                 });
-                galleryId = modified.Id;
             } else {
-                modified = _galleryRepo.Update(new Gallery {
+                _ = _galleryRepo.Update(new Gallery {
                     Title = title,
                     Id = (uint)galleryId,
                     Updated = DateTime.Now,
                 });
             }
 
-            var model = new GalleryViewModel {
-                GalleryList = _galleryRepo.GetForSelect(galleryId),
-                SelectedGallery = modified,
-            };
-
-            return View("EditGallery", model);
+            return RedirectToAction("ListGalleries", new { modified = true });
         }
         #endregion
 

@@ -153,6 +153,17 @@ form .thumbPreview {
 
 
 
+/* PAGES GRID */
+.grid.pages {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid .no-pages {
+    grid-column: 1 / span 2;
+}
+
+
+
 /* GRID CONTROLS */
 p.notice {
     border: 1px solid #b57979;

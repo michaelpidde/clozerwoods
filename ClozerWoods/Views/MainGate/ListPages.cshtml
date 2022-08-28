@@ -1,0 +1,27 @@
+﻿@using ClozerWoods.Models.ViewModels.MainGate
+@model ListPagesViewModel
+@{
+    Layout = "../Shared/_DashboardLayout.cshtml";
+    ViewData["Title"] = "Pages";
+}
+
+@if(Model.Modified) {
+    <p class="notice">Page saved.</p>
+}
+
+<a id="new" asp-controller="MainGate" asp-action="EditPage" asp-route-add="true">+</a>
+
+<div class="grid pages">
+    <div class="title">Id</div>
+    <div class="title">Title</div>
+    @if(Model.PageList!.Any()) {
+        string alt = "";
+        foreach(var item in Model.PageList!) {
+            <div class="col-id @alt"><a asp-controller="MainGate" asp-action="EditPage" asp-route-pageId="@item.Id">@item.Id</a></div>
+            <div class="col-title @alt">@item.Title</div>
+            alt = (alt == "") ? "alt" : "";
+        }
+    } else {
+        <div class="no-pages">There are no pages.</div>
+    }
+</div>

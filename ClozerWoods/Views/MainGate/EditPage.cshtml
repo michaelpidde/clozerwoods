@@ -5,20 +5,7 @@
     ViewData["Title"] = "Edit Page";
 }
 
-@section scripts {
-    <script type="text/javascript">
-        window.onload = () => {
-            attachItemSwitchEvent('pageId');
-        }
-    </script>
-}
-
 <form method="post" asp-controller="MainGate" asp-action="EditPage">
-    @if(Model.PageList!.Any()) {
-        <label for="pageId">Page</label>
-        <select name="pageId" id="pageId" asp-items="Model.PageList"></select>
-    }
-
     <label for="stub">Stub</label>
     <input type="text" name="stub" value="@Model.SelectedPage!.Stub" />
 
