@@ -102,6 +102,9 @@ submit {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+.grid .no-media {
+    grid-column: 1 / span 4;
+}
 .grid > div {
     background: #eee;
     padding: 3px;
@@ -131,4 +134,21 @@ p.notice {
     border: 1px solid #b57979;
     background-color: #e5a5a5;
     padding: 6px;
+}
+
+#new {
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #cccccc;
+    border: var(--border-style);
+    border-radius: 3px;
+}
+#new:hover {
+    background-color: #e5a5a5;
+    color: #000000;
 }

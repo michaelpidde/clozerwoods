@@ -50,7 +50,9 @@
     <p class="notice">Media item saved.</p>
 }
 
-@if(Model.SelectedMediaItem == null) {
+@if(!Model.Add) {
+
+    <a id="new" asp-controller="MainGate" asp-action="EditMediaItem" asp-route-add="true">+</a>
 
     <div class="grid">
         <div class="title">Id</div>
@@ -67,14 +69,16 @@
                 alt = (alt == "") ? "alt" : "";
             }
         } else {
-            <div>There are no media items.</div>
+            <div class="no-media">There are no media items.</div>
         }
     </div>
 
 } else {
 
     <form method="post" asp-controller="MainGate" asp-action="EditMediaItem" enctype="multipart/form-data">
-        <input type="hidden" name="mediaItemId" value="@Model.SelectedMediaItem.Id">
+        @if(!Model.Add) {
+            <input type="hidden" name="mediaItemId" value="@Model.SelectedMediaItem.Id">
+        }
 
         @if(Model.SelectedMediaItem.FileName == null) {
             <input type="hidden" name="hasExistingFile" value="false">

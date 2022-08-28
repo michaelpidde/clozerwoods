@@ -9,4 +9,5 @@ public class MediaItemsViewModel : SharedViewModel {
     public IEnumerable<MediaItem>? MediaItemList { get; init; }
     public IEnumerable<SelectListItem>? GalleryList { get; init; }
     public bool Modified { get; init; }
+    public bool Add { get; init; }
 }
