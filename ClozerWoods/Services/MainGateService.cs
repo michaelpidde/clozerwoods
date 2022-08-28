@@ -34,7 +34,7 @@ public class MainGateService {
                 Directory.CreateDirectory(fullFolder);
             } catch(Exception) {
                 // TODO: Handle this gracefully
-                throw new Exception("Could not create thumbnail folder.");
+                throw new Exception("Thumbnail folder does not exist. Unable to create it.");
             }
         }
 

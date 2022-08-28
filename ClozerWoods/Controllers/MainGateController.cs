@@ -233,8 +233,14 @@ namespace ClozerWoods.Controllers {
             string mediaFolder = _config["MediaFolder"];
 
             if(!Directory.Exists(mediaFolder)) {
-                // TODO: Catch this and handle it gracefully
-                throw new Exception("Media folder does not exist.");
+                
+                try {
+                    Directory.CreateDirectory(mediaFolder);
+                } catch(Exception) {
+                    // TODO: Handle this gracefully
+                    throw new Exception("Media folder does not exist. Unable to create it.");
+                }
+                
             }
 
             string fileName;
