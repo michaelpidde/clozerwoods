@@ -20,6 +20,15 @@
         <select name="parentId" id="parentId" asp-items="Model.ParentPageList"></select>
     }
 
+    <label for="isHome">Is Homepage</label>
+    @{
+        var isHome = "";
+        if(Model.SelectedPage.IsHome) {
+            isHome = "checked";
+        }
+    }
+    <input type="checkbox" name="isHome" @isHome />
+
     <label for="published">Published</label>
     @{
         var published = "";

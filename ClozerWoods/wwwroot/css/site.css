@@ -19,20 +19,37 @@ body {
     border-radius: 6px;
 }
 
-header {
+#root {
+    position: relative;
     width: 1024px;
-    margin: 10px auto;
-    padding: 10px;
+    margin: 0 auto;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    text-align: center;
     border: var(--border-style);
     background-color: var(--accent-color);
+    border-radius: 6px 6px 0 0;
+    z-index: -1;
+}
+header h1 {
+    padding: 6px 0 12px 0;
+    margin: 0;
 }
 
 nav ul {
+    padding: 0;
+    margin: 0;
     list-style: none;
 }
-nav li {
-    display: inline-block;
-    margin-right: 10px;
+
+li hr {
+    margin-top: 12px;
+    border: 1px dotted #523827;
 }
 
 a {
@@ -44,8 +61,9 @@ h1 {
 }
 
 main {
-    width: 1024px;
-    margin: 10px auto;
+    position: absolute;
+    top: 40px;
+    width: 1002px;
     padding: 10px;
     border: var(--border-style);
     background-color: var(--primary-color);
@@ -63,7 +81,7 @@ aside {
 
 content {
     float: right;
-    width: 780px;
+    width: 760px;
     padding: 10px;
     margin: 10px 10px 10px 0;
     border: var(--border-style);

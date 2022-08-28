@@ -6,6 +6,7 @@ public class Page {
     public string Stub { get; set; }
     public string Title { get; set; }
     public string? Content { get; set; }
+    public bool IsHome { get; set; }
     public bool Published { get; set; }
     public DateTime Created { get; init; }
     public DateTime Updated { get; set; }

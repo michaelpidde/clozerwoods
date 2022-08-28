@@ -3,4 +3,7 @@
     ViewData["Title"] = Model.SelectedPage.Title;
 }
 
-<h1>@Model.SelectedPage.Title</h1>
+<content class="rounded">
+    <h1>@Model.SelectedPage.Title</h1>
+    @Html.Raw(Model.SelectedPage.Content)
+</content>

@@ -59,10 +59,14 @@ public class PageRepository : IPageRepository {
         });
     }
 
-    public IEnumerable<Page> GetPublished =>
-        Pages
-        .OrderBy(x => x.Title)
-        .Where(p => p.Published);
+    public IEnumerable<Page> GetPublished(bool excludeHome = false) {
+        return Pages
+            .Where(p => excludeHome ? p.IsHome == false && p.Published : p.Published)
+            .OrderBy(x => x.IsHome)
+            .ThenBy(x => x.Title);
+    }
+
+    public Page GetHome => Pages.FirstOrDefault(p => p.IsHome && p.Published);
 
     public Page Add(Page page) {
         _context.Pages.Add(page);
@@ -71,6 +75,12 @@ public class PageRepository : IPageRepository {
     }
 
     public Page Update(Page page) {
+        if(page.IsHome) {
+            foreach(var p in _context.Pages) {
+                p.IsHome = false;
+            }
+        }
+
         _context.Entry(
             _context.Pages.FirstOrDefault(x => x.Id == page.Id)
         ).CurrentValues.SetValues(page);

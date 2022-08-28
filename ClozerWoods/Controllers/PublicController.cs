@@ -7,25 +7,29 @@ using ClozerWoods.Models.ViewModels.Public;
 namespace ClozerWoods.Controllers;
 public class PublicController : Controller {
     private readonly IPageRepository _pageRepo;
-    private readonly SharedViewModel _layoutViewModel;
 
     public PublicController(IPageRepository pageRepo) {
         _pageRepo = pageRepo;
-        _layoutViewModel = new SharedViewModel {
-            PublishedPages = _pageRepo.GetPublished,
-        };
     }
 
     [Route("")]
     public IActionResult Index() {
-        return View(_layoutViewModel);
+        var home = _pageRepo.GetHome;
+        if(home == null) {
+            throw new Exception("No published home page configured.");
+        }
+
+        return View("Page", new PageViewModel {
+            SelectedPage = home,
+            PublishedPages = _pageRepo.GetPublished(excludeHome: true),
+        });
     }
 
     [Route("Page/{stub}")]
     public IActionResult Page(string stub) {
         var model = new PageViewModel {
             SelectedPage = _pageRepo.GetByStub(stub),
-            PublishedPages = _pageRepo.GetPublished,
+            PublishedPages = _pageRepo.GetPublished(excludeHome: true),
         };
         return View(model);
     }

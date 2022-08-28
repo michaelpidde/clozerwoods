@@ -122,6 +122,7 @@ namespace ClozerWoods.Controllers {
             string stub,
             string title,
             string[] published,
+            string[] isHome,
             string content,
             uint? pageId = null,
             uint? parentId = null
@@ -133,6 +134,7 @@ namespace ClozerWoods.Controllers {
                     Content = content,
                     ParentId = parentId,
                     Published = published.Any(),
+                    IsHome = isHome.Any(),
                     Created = DateTime.Now,
                 });
             } else {
@@ -142,6 +144,7 @@ namespace ClozerWoods.Controllers {
                     Content = content,
                     ParentId = parentId,
                     Published = published.Any(),
+                    IsHome = isHome.Any(),
                     Id = (uint)pageId,
                     Updated = DateTime.Now,
                 });

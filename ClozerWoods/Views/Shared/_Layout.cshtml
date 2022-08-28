@@ -11,25 +11,30 @@
     <link rel="icon" href="data:,">
 </head>
 <body>
-    @if(Model.PublishedPages != null && Model.PublishedPages.Any()) {
-        <header class="rounded">
-            <nav>
-                <ul>
-                    <li><a asp-area="" asp-controller="Public" asp-action="Index">Home</a></li>
-                    @foreach(var p in Model.PublishedPages!) {
-                        <li><a asp-area="" asp-controller="Public" asp-action="Page" asp-route-stub="@p.Stub">@p.Title</a></li>
-                    }
-                    <li>|</li>
-                    <li><a asp-area="" asp-controller="MainGate" asp-action="Dashboard">Dashboard</a></li>
-                </ul>
-            </nav>
+    <div id="root">
+        <header>
+            <h1>Clozer Woods</h1>
         </header>
-    }
+        <main class="rounded">
+            @if(Model.PublishedPages != null && Model.PublishedPages.Any()) {
+                <aside class="rounded">
+                    <nav>
+                        <ul>
+                            <li><a asp-area="" asp-controller="Public" asp-action="Index">Home</a></li>
+                            @foreach(var p in Model.PublishedPages!) {
+                                <li><a asp-area="" asp-controller="Public" asp-action="Page" asp-route-stub="@p.Stub">@p.Title</a></li>
+                            }
+                            <li><hr /></li>
+                            <li><a asp-area="" asp-controller="MainGate" asp-action="Dashboard">Dashboard</a></li>
+                        </ul>
+                    </nav>
+                </aside>
+            }
 
-    <main class="rounded">
-        @RenderBody()
-        <div class="clear"></div>
-    </main>
+            @RenderBody()
+            <div class="clear"></div>
+        </main>
+    </div>
 
     @RenderSection("scripts", false)
 </body>
