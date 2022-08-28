@@ -19,6 +19,9 @@
         <select name="pageId" id="pageId" asp-items="Model.PageList"></select>
     }
 
+    <label for="stub">Stub</label>
+    <input type="text" name="stub" value="@Model.SelectedPage!.Stub" />
+
     <label for="title">Title</label>
     <input type="text" name="title" value="@Model.SelectedPage!.Title" />
 

@@ -34,6 +34,17 @@ public class PageRepository : IPageRepository {
         return page;
     }
 
+    public Page GetByStub(string stub) {
+        Page? page = null;
+        if(Pages != null) {
+            page = Pages.FirstOrDefault(x => x.Stub == stub);
+        }
+        if(page == null) {
+            throw new PageNotFoundException();
+        }
+        return page;
+    }
+
     public IEnumerable<SelectListItem> GetForSelect(uint? pageId = null, string? defaultItemLabel = "* New") {
         var list = Pages
                    .OrderBy(page => page.Title)
@@ -48,6 +59,11 @@ public class PageRepository : IPageRepository {
         });
     }
 
+    public IEnumerable<Page> GetPublished =>
+        Pages
+        .OrderBy(x => x.Title)
+        .Where(p => p.Published);
+
     public Page Add(Page page) {
         _context.Pages.Add(page);
         _context.SaveChanges();
@@ -55,20 +71,11 @@ public class PageRepository : IPageRepository {
     }
 
     public Page Update(Page page) {
-        Page? toUpdate = null;
-        try {
-            toUpdate = Get(page.Id);
-        } catch(PageNotFoundException) {
-            // TODO: Log this or something. This really should not happen.
-        }
-        if(toUpdate != null) {
-            toUpdate.Title = page.Title;
-            toUpdate.Content = page.Content;
-            toUpdate.ParentId = page.ParentId;
-            toUpdate.Published = page.Published;
-            _context.SaveChanges();
-        }
-        return toUpdate!;
+        _context.Entry(
+            _context.Pages.FirstOrDefault(x => x.Id == page.Id)
+        ).CurrentValues.SetValues(page);
+        _context.SaveChanges();
+        return page;
     }
 }
 

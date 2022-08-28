@@ -7,7 +7,9 @@ public interface IPageRepository {
     IEnumerable<Page> Pages { get; }
     Page Get(uint id);
     Page Get(string title);
+    Page GetByStub(string stub);
     IEnumerable<SelectListItem> GetForSelect(uint? pageId = null, string? defaultItemLabel = "* New");
+    IEnumerable<Page> GetPublished { get; }
     Page Add(Page page);
     Page Update(Page page);
 }

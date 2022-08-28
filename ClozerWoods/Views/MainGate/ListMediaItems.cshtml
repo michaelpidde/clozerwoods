@@ -1,0 +1,50 @@
+﻿@using ClozerWoods.Models.ViewModels.MainGate
+@model ListMediaItemsViewModel
+@{
+    Layout = "../Shared/_DashboardLayout.cshtml";
+    ViewData["Title"] = "Edit Media Item";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        window.onload = () => {
+            document.querySelectorAll('.col-thumb a').forEach(thumb => {
+                generateThumbnailPreview(thumb);
+                thumb.addEventListener('mouseover', function(e) {
+                    showThumbnailPreview(thumb);
+                });
+                thumb.addEventListener('mouseout', function(e) {
+                    hideThumbnailPreview(thumb);
+                });
+                thumb.addEventListener('click', function(e) {
+                    e.preventDefault();
+                });
+            });
+        }
+    </script>
+}
+
+@if(Model.Modified) {
+    <p class="notice">Media item saved.</p>
+}
+
+<a id="new" asp-controller="MainGate" asp-action="EditMediaItem" asp-route-add="true">+</a>
+
+<div class="grid">
+    <div class="title">Id</div>
+    <div class="title">Title</div>
+    <div class="title">Description</div>
+    <div class="title">Thumbnail</div>
+    @if(Model.MediaItemList!.Any()) {
+        string alt = "";
+        foreach(var item in Model.MediaItemList!) {
+            <div class="col-id @(alt)"><a href="editmediaitem?mediaItemId=@(item.Id)">@(item.Id)</a></div>
+            <div class="col-title @(alt)">@(item.Title)</div>
+            <div class="col-desc @(alt)">@(item.Description)</div>
+            <div class="col-thumb @(alt)"><a href="@(Model.MediaUrl + item.Thumbnail)">View</a></div>
+            alt = (alt == "") ? "alt" : "";
+        }
+    } else {
+        <div class="no-media">There are no media items.</div>
+    }
+</div>

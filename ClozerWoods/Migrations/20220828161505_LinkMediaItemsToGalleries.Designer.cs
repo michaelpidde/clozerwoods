@@ -3,6 +3,7 @@ using System;
 using ClozerWoods.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClozerWoods.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220828161505_LinkMediaItemsToGalleries")]
+    partial class LinkMediaItemsToGalleries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,10 +96,6 @@ namespace ClozerWoods.Migrations
                     b.Property<bool>("Published")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Stub")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -131,11 +129,9 @@ namespace ClozerWoods.Migrations
 
             modelBuilder.Entity("ClozerWoods.Models.Entities.MediaItem", b =>
                 {
-                    b.HasOne("ClozerWoods.Models.Entities.Gallery", "Gallery")
+                    b.HasOne("ClozerWoods.Models.Entities.Gallery", null)
                         .WithMany("MediaItems")
                         .HasForeignKey("GalleryId");
-
-                    b.Navigation("Gallery");
                 });
 
             modelBuilder.Entity("ClozerWoods.Models.Entities.Gallery", b =>

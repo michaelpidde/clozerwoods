@@ -5,4 +5,5 @@ public class Gallery {
     public string Title { get; set; }
     public DateTime Created { get; init; }
     public DateTime Updated { get; set; }
+    public ICollection<MediaItem> MediaItems { get; set; }
 }

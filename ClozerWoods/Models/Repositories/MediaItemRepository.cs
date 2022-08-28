@@ -44,19 +44,11 @@ public class MediaItemRepository : IMediaItemRepository {
     }
 
     public MediaItem Update(MediaItem mediaItem) {
-        MediaItem? toUpdate = null;
-        try {
-            toUpdate = Get(mediaItem.Id);
-        } catch(MediaItemNotFoundException) {
-            // TODO: Log this or something. This really should not happen.
-        }
-        if(toUpdate != null) {
-            toUpdate.Title = mediaItem.Title;
-            toUpdate.Description = mediaItem.Description;
-            toUpdate.FileName = mediaItem.FileName;
-            _context.SaveChanges();
-        }
-        return toUpdate!;
+        _context.Entry(
+            _context.MediaItems.FirstOrDefault(x => x.Id == mediaItem.Id)
+        ).CurrentValues.SetValues(mediaItem);
+        _context.SaveChanges();
+        return mediaItem;
     }
 }
 

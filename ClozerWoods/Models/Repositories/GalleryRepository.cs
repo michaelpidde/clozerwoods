@@ -1,5 +1,6 @@
 ﻿using ClozerWoods.Models.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClozerWoods.Models.Repositories;
 
@@ -20,7 +21,7 @@ public class GalleryRepository : IGalleryRepository {
     public Gallery Get(uint id) {
         Gallery? gallery = null;
         if(Galleries != null) {
-            gallery = Galleries.FirstOrDefault(x => x.Id == id);
+            gallery = _context.Galleries.Include(g => g.MediaItems).FirstOrDefault(x => x.Id == id);
         }
         if(gallery == null) {
             throw new GalleryNotFoundException();
@@ -31,7 +32,7 @@ public class GalleryRepository : IGalleryRepository {
     public Gallery Get(string title) {
         Gallery? gallery = null;
         if(Galleries != null) {
-            gallery = Galleries.FirstOrDefault(x => x.Title == title);
+            gallery = _context.Galleries.Include(g => g.MediaItems).FirstOrDefault(x => x.Title == title);
         }
         if(gallery == null) {
             throw new GalleryNotFoundException();
@@ -54,17 +55,11 @@ public class GalleryRepository : IGalleryRepository {
     }
 
     public Gallery Update(Gallery gallery) {
-        Gallery? toUpdate = null;
-        try {
-            toUpdate = Get(gallery.Id);
-        } catch(GalleryNotFoundException) {
-            // TODO: Log this or something. This really should not happen.
-        }
-        if(toUpdate != null) {
-            toUpdate.Title = gallery.Title;
-            _context.SaveChanges();
-        }
-        return toUpdate!;
+        _context.Entry(
+            _context.Galleries.FirstOrDefault(x => x.Id == gallery.Id)
+        ).CurrentValues.SetValues(gallery);
+        _context.SaveChanges();
+        return gallery;
     }
 }
 
