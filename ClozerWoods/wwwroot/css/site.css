@@ -19,7 +19,7 @@ body {
     border-radius: 6px;
 }
 
-#root {
+main {
     position: relative;
     width: 1024px;
     margin: 0 auto;
@@ -36,6 +36,7 @@ header {
     border-radius: 6px 6px 0 0;
     z-index: -1;
 }
+
 header h1 {
     padding: 6px 0 12px 0;
     margin: 0;
@@ -60,7 +61,7 @@ h1 {
     font-size: 130%;
 }
 
-main {
+content {
     position: absolute;
     top: 40px;
     width: 1002px;
@@ -79,7 +80,7 @@ aside {
     font-size: 80%;
 }
 
-content {
+article {
     float: right;
     width: 760px;
     padding: 10px;
@@ -100,11 +101,12 @@ label {
     display: block;
     font-weight: bold;
 }
+
 label:after {
     content: ":";
 }
 
-input, select {
+input, select, textarea {
     display: block;
     margin-bottom: 10px;
     border: var(--border-style);
@@ -113,6 +115,11 @@ input, select {
 
 submit {
     display: block;
+}
+
+#pageContent {
+    width: 99%;
+    height: 400px;
 }
 
 
@@ -125,13 +132,16 @@ submit {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
+
 .grid > div {
     background: #eee;
     padding: 3px;
 }
+
 .grid .alt {
     background: #e3e3e3;
 }
+
 .grid .title {
     background: #ccc;
     font-weight: bold;
@@ -143,9 +153,11 @@ submit {
 .grid.media {
     grid-template-columns: repeat(4, 1fr);
 }
+
 .grid .no-media {
     grid-column: 1 / span 4;
 }
+
 .grid .thumbPreview {
     display: none;
     position: absolute;
@@ -165,6 +177,7 @@ form .thumbPreview {
 .grid.galleries {
     grid-template-columns: repeat(3, 1fr);
 }
+
 .grid .no-galleries {
     grid-column: 1 / span 3;
 }
@@ -201,7 +214,25 @@ p.notice {
     border: var(--border-style);
     border-radius: 3px;
 }
+
 #new:hover {
     background-color: #e5a5a5;
     color: #000000;
+}
+
+
+
+/* CONTENT */
+.completion-checkbox {
+    display: inline-block;
+    margin: 0 6px 0 0;
+    padding: 0;
+}
+
+ul.no-bullet, ul.no-bullet ul {
+    padding-left: 20px;
+    list-style-type: none;
+}
+ul.no-bullet li {
+    padding: 4px 0;
 }

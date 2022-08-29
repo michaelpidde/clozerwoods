@@ -1,9 +1,10 @@
-﻿@model ClozerWoods.Models.ViewModels.Public.PageViewModel
+﻿@using ClozerWoods.Services
+@model ClozerWoods.Models.ViewModels.Public.PageViewModel
 @{
     ViewData["Title"] = Model.SelectedPage.Title;
 }
 
-<content class="rounded">
+<article class="rounded">
     <h1>@Model.SelectedPage.Title</h1>
-    @Html.Raw(Model.SelectedPage.Content)
-</content>
+    @Html.Raw(QuickTagService.Transform(Model.SelectedPage.Content))
+</article>

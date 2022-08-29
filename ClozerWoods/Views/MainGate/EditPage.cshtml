@@ -13,7 +13,7 @@
     <input type="text" name="title" value="@Model.SelectedPage!.Title" />
 
     <label for="content">Content</label>
-    <textarea name="content">@Model.SelectedPage!.Content</textarea>
+    <textarea name="content" id="pageContent" spellcheck="false">@Model.SelectedPage!.Content</textarea>
 
     @if(Model.ParentPageList!.Any()) {
         <label for="parentId">Parent</label>

@@ -11,11 +11,11 @@
     <link rel="icon" href="data:,">
 </head>
 <body>
-    <div id="root">
+    <main>
         <header>
             <h1>Clozer Woods</h1>
         </header>
-        <main class="rounded">
+        <content class="rounded">
             @if(Model.PublishedPages != null && Model.PublishedPages.Any()) {
                 <aside class="rounded">
                     <nav>
@@ -33,8 +33,8 @@
 
             @RenderBody()
             <div class="clear"></div>
-        </main>
-    </div>
+        </content>
+    </main>
 
     @RenderSection("scripts", false)
 </body>
