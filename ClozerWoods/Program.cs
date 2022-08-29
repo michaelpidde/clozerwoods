@@ -22,16 +22,16 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+// This is for reverse proxy configuration
+app.UseForwardedHeaders(new ForwardedHeadersOptions {
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 if(!app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
     app.UseHttpsRedirection();
 }
-
-// This is for reverse proxy configuration
-app.UseForwardedHeaders(new ForwardedHeadersOptions {
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
