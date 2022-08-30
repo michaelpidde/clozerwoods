@@ -3,13 +3,20 @@ using ClozerWoods.Models.ViewModels;
 using ClozerWoods.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using ClozerWoods.Models.ViewModels.Public;
+using ClozerWoods.Services;
 
 namespace ClozerWoods.Controllers;
 public class PublicController : Controller {
+    private readonly IConfiguration _config;
+    private readonly IMediaItemRepository _mediaItemRepo;
     private readonly IPageRepository _pageRepo;
+    private readonly QuickTagService _quickTagService;
 
-    public PublicController(IPageRepository pageRepo) {
+    public PublicController(IConfiguration config, IMediaItemRepository mediaItemRepo, IPageRepository pageRepo) {
+        _config = config;
+        _mediaItemRepo = mediaItemRepo;
         _pageRepo = pageRepo;
+        _quickTagService = new QuickTagService(_mediaItemRepo, _config["MediaUrl"]);
     }
 
     [Route("")]
@@ -22,6 +29,7 @@ public class PublicController : Controller {
         return View("Page", new PageViewModel {
             SelectedPage = home,
             PublishedPages = _pageRepo.GetPublished(excludeHome: true),
+            QuickTagService = _quickTagService,
         });
     }
 
@@ -30,6 +38,7 @@ public class PublicController : Controller {
         var model = new PageViewModel {
             SelectedPage = _pageRepo.GetByStub(stub),
             PublishedPages = _pageRepo.GetPublished(excludeHome: true),
+            QuickTagService = _quickTagService,
         };
         return View(model);
     }

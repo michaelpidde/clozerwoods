@@ -5,6 +5,19 @@
     ViewData["Title"] = "Edit Page";
 }
 
+@section scripts {
+    <script type="text/javascript">
+        window.onload = () => {
+            document.querySelector('#showHelp').onclick = function() {
+                showHelpModal();
+            };
+            document.querySelector('#insertMedia').onclick = function() {
+                showMediaItemModal();
+            };
+        }
+    </script>
+}
+
 <form method="post" asp-controller="MainGate" asp-action="EditPage">
     <label for="stub">Stub</label>
     <input type="text" name="stub" value="@Model.SelectedPage!.Stub" />
@@ -12,7 +25,10 @@
     <label for="title">Title</label>
     <input type="text" name="title" value="@Model.SelectedPage!.Title" />
 
-    <label for="content">Content</label>
+    <div class="toolbar">
+        <img id="showHelp" class="tool" src="~/images/icon-book.gif" title="Show help" />
+        <img id="insertMedia" class="tool" src="~/images/icon-image.gif" title="Insert media" />
+    </div>
     <textarea name="content" id="pageContent" spellcheck="false">@Model.SelectedPage!.Content</textarea>
 
     @if(Model.ParentPageList!.Any()) {

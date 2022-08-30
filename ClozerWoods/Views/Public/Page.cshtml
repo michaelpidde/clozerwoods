@@ -6,5 +6,5 @@
 
 <article class="rounded">
     <h1>@Model.SelectedPage.Title</h1>
-    @Html.Raw(QuickTagService.Transform(Model.SelectedPage.Content))
+    @Html.Raw(Model.QuickTagService.Transform(Model.SelectedPage.Content))
 </article>
