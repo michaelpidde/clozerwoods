@@ -22,42 +22,40 @@ const hideThumbnailPreview = (element) => {
     preview.style.display = 'none';
 }
 
-const showHelpModal = () => {
-    console.log('help modal');
-    const modal = new Modal(() => { });
+const showGuideModal = (content) => {
+    const modal = new Modal('Formatting Guide', () => {
+        return content;
+    });
     modal.show();
 }
 
 const showMediaItemModal = () => {
-    console.log('media item modal');
     const content = document.querySelector('#pageContent');
     const insertPosition = content.selectionStart;
     console.log(insertPosition);
 }
 
 let Modal = class {
-    width = 400;
-    height = 300;
-
     #modalOverlayId = 'modal-overlay';
     #modalContainerId = 'modal-container';
     #modalCloseId = 'modal-close';
+    #modalHeaderId = 'modal-header';
+    #modalContentId = 'modal-content';
 
-    constructor(contentCallback) {
+    constructor(title, contentCallback) {
+        this.title = title;
         if (typeof (contentCallback) !== 'function') {
             console.error('Argument contentCallback of class Modal must be of type function.');
         }
         this.contentCallback = contentCallback;
-        // Store a local reference to onResizeEvent with a bound 'this' context so addEventListener
-        // and removeEventListener can reference it properly
-        this.resizeHandler = this.onResizeEvent.bind(this);
     }
 
     show() {
         const overlay = this.getOverlay();
 
         const container = this.getContainer();
-        container.appendChild(this.getClose());
+        container.appendChild(this.getHeader());
+        container.appendChild(this.getContent());
 
         overlay.appendChild(container);
         document.body.prepend(overlay);
@@ -66,32 +64,13 @@ let Modal = class {
     }
 
     close() {
-        this.removeEvents();
         document.getElementById(this.#modalOverlayId).remove();
     }
 
-    onResizeEvent() {
-        this.positionContainer();
-    }
-
     addEvents() {
-        window.addEventListener('resize', this.resizeHandler);
         document.getElementById(this.#modalCloseId).addEventListener('click', () => {
             this.close();
         });
-    }
-
-    removeEvents() {
-        // Remove any events that won't otherwise be removed by destroying this object
-        window.removeEventListener('resize', this.resizeHandler);
-    }
-
-    positionContainer(container) {
-        if (container === undefined) {
-            container = document.getElementById(this.#modalContainerId);
-        }
-        container.style.top = (window.innerHeight / 2) - (this.height / 2) + 'px';
-        container.style.left = (window.innerWidth / 2) - (this.width / 2) + 'px';
     }
 
     getClose() {
@@ -100,12 +79,28 @@ let Modal = class {
         return close;
     }
 
+    getContent() {
+        const content = document.createElement('div');
+        content.id = this.#modalContentId;
+        content.innerHTML = this.contentCallback();
+        return content;
+    }
+
+    getHeader() {
+        const header = document.createElement('div');
+        header.id = this.#modalHeaderId;
+        if (this.title.length) {
+            header.innerHTML = `<h1>${this.title}</h1>`;
+        }
+        header.appendChild(this.getClose());
+        return header;
+    }
+
     getContainer() {
         const container = document.createElement('div');
         container.id = this.#modalContainerId;
         container.style.width = `${this.width}px`;
         container.style.height = `${this.height}px`;
-        this.positionContainer(container);
         return container;
     }
 

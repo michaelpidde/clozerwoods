@@ -1,0 +1,29 @@
+﻿<div id="formatting-guide">
+    <h1>Quick Tags</h1>
+    <p>Quick tags are a succinct way to specify replacement values which are automatically expanded into more
+        complex content. Their syntax does not allow additional whitespace or parameters other than specified
+        in the descriptions below.</p>
+    
+    <h2>Checkboxes</h2>
+    <div class="tag-grid">
+        <div class="title">Tag</div>
+        <div class="title">Result</div>
+        <div><code>[X]</code></div>
+        <div><input type="checkbox" class="completion-checkbox" checked disabled></div>
+        <div><code>[]</code></div>
+        <div><input type="checkbox" class="completion-checkbox" disabled></div>
+    </div>
+
+    <h2>Media Items</h2>
+    <p>
+        Media items can be inserted referenced by ID. Optionally a positional argument can be supplied to align left (default) or right.
+    </p>
+    <div class="tag-grid">
+        <div class="title">Tag</div>
+        <div class="title">Result</div>
+        <div><code>[img 0] or [img 0 left]</code></div>
+        <div><img src="~/images/smile.png" class="left"></div>
+        <div><code>[img 0 right]</code></div>
+        <div><img src="~/images/smile.png" class="right"></div>
+    </div>
+</div>

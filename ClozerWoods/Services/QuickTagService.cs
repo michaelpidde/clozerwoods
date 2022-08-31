@@ -36,9 +36,8 @@ public class QuickTagService
     public string Image(string content) {
         /*
          * [img 0 right|left]
-         * [img 000      right|left]
          */
-        var regex = new Regex(@"\[img (\d+)[ ]*?(left|right)?\]", RegexOptions.Compiled);
+        var regex = new Regex(@"\[img (\d+)( left| right)?\]", RegexOptions.Compiled);
         MatchCollection matches = regex.Matches(content);
         uint id;
         string position;

@@ -9,7 +9,7 @@
     <script type="text/javascript">
         window.onload = () => {
             document.querySelector('#showHelp').onclick = function() {
-                showHelpModal();
+                showGuideModal(`@{ Html.RenderPartial("~/Views/Public/FormattingGuide.cshtml"); }`);
             };
             document.querySelector('#insertMedia').onclick = function() {
                 showMediaItemModal();

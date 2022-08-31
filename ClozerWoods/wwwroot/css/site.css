@@ -11,6 +11,7 @@ html {
 }
 
 body {
+    position: relative;
     background-color: #fffae4;
     font-family: Verdana;
 }
@@ -276,6 +277,15 @@ article h2 {
 
 #modal-container {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 300px;
+    min-height: 200px;
+    max-width: 95%;
+    max-height: 95%;
+    overflow-y: auto;
+    overflow-x: hidden;
     z-index: 10000;
     background-color: #ffffff;
     border: var(--border-style);
@@ -293,4 +303,68 @@ article h2 {
 
 #modal-container #modal-close:hover {
     cursor: pointer;
+}
+
+#modal-container #modal-header {
+    margin: 0;
+    min-height: 28px;
+    width: 100%;
+    background-color: #eeeeee;
+}
+
+#modal-header h1 {
+    margin: 0;
+    padding: 16px;
+    font-size: 100%;
+}
+
+#modal-container #modal-content {
+    padding: 16px;
+    font-size: 80%;
+}
+
+
+
+/* HELP */
+.tag-grid {
+    display: grid;
+    gap: 0;
+    grid-auto-rows: minmax(20px, auto);
+    grid-template-columns: repeat(2, 1fr);
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.tag-grid > div {
+    background: #eee;
+    padding: 3px;
+}
+
+.tag-grid .title {
+    background: #ccc;
+    font-weight: bold;
+}
+
+.tag-grid > div:nth-child(4n+3),
+.tag-grid > div:nth-child(4n+4) {
+    background-color: #ffffff;
+}
+
+#formatting-guide h1 {
+    font-size: 120%;
+    padding-bottom: 4px;
+    border-bottom: 1px dotted #aaaaaa;
+}
+
+#formatting-guide h2 {
+    margin-top: 40px;
+    padding-bottom: 4px;
+    border-bottom: 1px dotted #aaaaaa;
+    font-size: 100%;
+    color: #666666;
+    text-transform: uppercase;
+}
+
+#formatting-guide code {
+    font-size: 120%;
 }
