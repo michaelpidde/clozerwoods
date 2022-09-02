@@ -30,9 +30,26 @@ const showGuideModal = (content) => {
 }
 
 const showMediaItemModal = () => {
-    const content = document.querySelector('#pageContent');
-    const insertPosition = content.selectionStart;
-    console.log(insertPosition);
+    fetch("/maingate/mediaitems/all")
+        .then(response => response.json())
+        .then(data => {
+            const modal = new Modal('Insert Media Item', () => {
+                let items = '';
+                data.items.forEach(
+                    item => items += `<div><img src="${data.mediaUrl}/${item.thumbnail}" data-id="${item.id}"></div>`
+                );
+                return `<div id="media-item-grid">${items}</div>`;
+            });
+
+            document.querySelectorAll("#media-item-grid > div img").forEach(img => {
+                img.onclick = () => {
+                    navigator.clipboard.writeText(`[img ${img.dataset.id}]`);
+                    // TODO: Show temporary modal that it's copied...
+                };
+            })
+
+            modal.show();
+        });
 }
 
 let Modal = class {
@@ -48,9 +65,11 @@ let Modal = class {
             console.error('Argument contentCallback of class Modal must be of type function.');
         }
         this.contentCallback = contentCallback;
+
+        this.create();
     }
 
-    show() {
+    create() {
         const overlay = this.getOverlay();
 
         const container = this.getContainer();
@@ -61,6 +80,10 @@ let Modal = class {
         document.body.prepend(overlay);
 
         this.addEvents();
+    }
+
+    show() {
+        document.getElementById(this.#modalOverlayId).style.display = 'block';
     }
 
     close() {

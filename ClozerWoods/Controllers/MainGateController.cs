@@ -322,6 +322,15 @@ namespace ClozerWoods.Controllers {
 
             return RedirectToAction("ListMediaItems", new { modified = true });
         }
+
+
+
+        [Authorize]
+        [HttpGet("mediaitems/all")]
+        public JsonResult GetAllMediaItems() => new JsonResult(new {
+            items = _mediaItemRepo.MediaItems,
+            mediaUrl = _config["MediaUrl"],
+        });
         #endregion
     }
 }
