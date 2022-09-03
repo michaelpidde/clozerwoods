@@ -46,17 +46,22 @@ const showMediaItemModal = () => {
                 `;
             });
 
-            const notice = document.querySelector('#clipboard-notice');
-
+            const setNotice = (tag, target) => {
+                const notice = document.querySelector('#clipboard-notice');
+                // This shows the notice again
+                notice.className = 'visible';
+                notice.innerHTML = `${tag} copied to clipboard`;
+                notice.style.top = target.offsetTop + 'px';
+                notice.style.left = target.offsetLeft + 'px';
+                // This will set the transition fade out into motion
+                notice.className = 'hidden';
+            }
+            
             document.querySelectorAll("#media-item-grid > div img").forEach(img => {
                 img.onclick = function(e) {
                     const tag = `[img ${img.dataset.id}]`;
                     navigator.clipboard.writeText(tag);
-                    notice.className = 'visible';
-                    notice.innerHTML = `${tag} copied to clipboard`;
-                    notice.style.top = e.target.offsetTop + 'px';
-                    notice.style.left = e.target.offsetLeft + 'px';
-                    notice.className = 'hidden';
+                    setNotice(tag, e.target);
                 };
             })
 
@@ -103,9 +108,7 @@ let Modal = class {
     }
 
     addEvents() {
-        document.getElementById(this.#modalCloseId).addEventListener('click', () => {
-            this.close();
-        });
+        document.getElementById(this.#modalCloseId).addEventListener('click', () => this.close());
     }
 
     getClose() {
