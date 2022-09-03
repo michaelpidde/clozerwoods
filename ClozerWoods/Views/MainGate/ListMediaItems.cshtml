@@ -41,7 +41,7 @@
             <div class="col-id @alt"><a asp-action="EditMediaItem" asp-route-mediaItemId="@item.Id">@item.Id</a></div>
             <div class="col-title @alt">@item.Title</div>
             <div class="col-desc @alt">@item.Description</div>
-            <div class="col-thumb @alt"><a href="@(Model.MediaUrl + item.Thumbnail)">View</a></div>
+            <div class="col-thumb @alt"><a href="@(Model.MediaUrl + System.IO.Path.DirectorySeparatorChar + item.Thumbnail)">View</a></div>
             alt = (alt == "") ? "alt" : "";
         }
     } else {

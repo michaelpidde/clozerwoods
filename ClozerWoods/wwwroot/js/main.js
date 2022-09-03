@@ -38,13 +38,25 @@ const showMediaItemModal = () => {
                 data.items.forEach(
                     item => items += `<div><img src="${data.mediaUrl}/${item.thumbnail}" data-id="${item.id}"></div>`
                 );
-                return `<div id="media-item-grid">${items}</div>`;
+                return `
+                    <div id="insert-media">
+                        <div id="clipboard-notice">Item copied to clipboard</div>
+                        <div id="media-item-grid">${items}</div>
+                    </div>
+                `;
             });
 
+            const notice = document.querySelector('#clipboard-notice');
+
             document.querySelectorAll("#media-item-grid > div img").forEach(img => {
-                img.onclick = () => {
-                    navigator.clipboard.writeText(`[img ${img.dataset.id}]`);
-                    // TODO: Show temporary modal that it's copied...
+                img.onclick = function(e) {
+                    const tag = `[img ${img.dataset.id}]`;
+                    navigator.clipboard.writeText(tag);
+                    notice.className = 'visible';
+                    notice.innerHTML = `${tag} copied to clipboard`;
+                    notice.style.top = e.target.offsetTop + 'px';
+                    notice.style.left = e.target.offsetLeft + 'px';
+                    notice.className = 'hidden';
                 };
             })
 
