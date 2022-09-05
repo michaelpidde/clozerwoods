@@ -56,9 +56,9 @@ const showMediaItemModal = () => {
                 // This will set the transition fade out into motion
                 notice.className = 'hidden';
             }
-            
+
             document.querySelectorAll("#media-item-grid > div img").forEach(img => {
-                img.onclick = function(e) {
+                img.onclick = function (e) {
                     const tag = `[img ${img.dataset.id}]`;
                     navigator.clipboard.writeText(tag);
                     setNotice(tag, e.target);

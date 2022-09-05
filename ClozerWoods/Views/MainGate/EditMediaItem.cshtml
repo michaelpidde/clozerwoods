@@ -35,7 +35,7 @@
         <input type="hidden" name="hasExistingFile" value="true">
         <p>@Model.SelectedMediaItem.FileName</p>
         <div class="thumbPreview">
-            <img src="@(Model.MediaUrl + Model.SelectedMediaItem.Thumbnail)">
+            <img src="@(Model.MediaUrl + System.IO.Path.DirectorySeparatorChar + Model.SelectedMediaItem.Thumbnail)">
         </div>
     }
 

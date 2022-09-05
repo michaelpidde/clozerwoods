@@ -4,6 +4,17 @@
     ViewData["Title"] = Model.SelectedPage.Title;
 }
 
+@section scripts {
+    <script src="~/js/public.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+    window.onload = () => {
+        document.querySelectorAll('[data-gallery]').forEach(gallery => {
+            initializeGallery(gallery);
+        });
+    };
+    </script>
+}
+
 <article class="rounded">
     <h1>@Model.SelectedPage.Title</h1>
     @Html.Raw(Model.QuickTagService.Transform(Model.SelectedPage.Content))

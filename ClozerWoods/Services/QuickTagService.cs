@@ -6,10 +6,12 @@ namespace ClozerWoods.Services;
 
 public class QuickTagService
 {
+    private IGalleryRepository _galleryRepo;
     private IMediaItemRepository _mediaItemRepo;
     private string _mediaUrl;
 
-    public QuickTagService(IMediaItemRepository mediaItemRepo, string mediaUrl) {
+    public QuickTagService(IGalleryRepository galleryRepo, IMediaItemRepository mediaItemRepo, string mediaUrl) {
+        _galleryRepo = galleryRepo;
         _mediaItemRepo = mediaItemRepo;
         _mediaUrl = mediaUrl;
     }
@@ -20,6 +22,7 @@ public class QuickTagService
         }
         content = CompletionCheckboxes(content);
         content = Image(content);
+        content = Gallery(content);
         return content;
     }
 
@@ -58,6 +61,25 @@ public class QuickTagService
                 groups[0].Value,
                 $"<img src=\"{_mediaUrl}{Path.DirectorySeparatorChar}{item.Thumbnail}\" class=\"{position}\">"
             );
+        }
+        return content;
+    }
+
+    public string Gallery(string content) {
+        /*
+         * [gallery 0]
+         */
+        var regex = new Regex(@"\[gallery (\d+)\]", RegexOptions.Compiled);
+        MatchCollection matches = regex.Matches(content);
+        uint id;
+        GroupCollection groups;
+        Gallery gallery;
+        foreach(Match match in matches) {
+            groups = match.Groups;
+            id = UInt32.Parse(groups[1].Value);
+            gallery = _galleryRepo.Get(id);
+            content = content.Replace(groups[0].Value,
+                $"<div class=\"gallery\" data-gallery=\"{id}\"><img src=\"{_mediaUrl}{Path.DirectorySeparatorChar}{gallery.MediaItems.First().Thumbnail}\"></div>");
         }
         return content;
     }

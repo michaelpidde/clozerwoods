@@ -8,15 +8,17 @@ using ClozerWoods.Services;
 namespace ClozerWoods.Controllers;
 public class PublicController : Controller {
     private readonly IConfiguration _config;
+    private readonly IGalleryRepository _galleryRepo;
     private readonly IMediaItemRepository _mediaItemRepo;
     private readonly IPageRepository _pageRepo;
     private readonly QuickTagService _quickTagService;
 
-    public PublicController(IConfiguration config, IMediaItemRepository mediaItemRepo, IPageRepository pageRepo) {
+    public PublicController(IConfiguration config, IGalleryRepository galleryRepo, IMediaItemRepository mediaItemRepo, IPageRepository pageRepo) {
         _config = config;
+        _galleryRepo = galleryRepo;
         _mediaItemRepo = mediaItemRepo;
         _pageRepo = pageRepo;
-        _quickTagService = new QuickTagService(_mediaItemRepo, _config["MediaUrl"]);
+        _quickTagService = new QuickTagService(_galleryRepo, _mediaItemRepo, _config["MediaUrl"]);
     }
 
     [Route("")]
@@ -28,7 +30,7 @@ public class PublicController : Controller {
 
         return View("Page", new PageViewModel {
             SelectedPage = home,
-            PublishedPages = _pageRepo.GetPublished(excludeHome: true),
+            PublishedPages = _pageRepo.GetPublished(excludeChildren: true),
             QuickTagService = _quickTagService,
         });
     }
@@ -37,7 +39,7 @@ public class PublicController : Controller {
     public IActionResult Page(string stub) {
         var model = new PageViewModel {
             SelectedPage = _pageRepo.GetByStub(stub),
-            PublishedPages = _pageRepo.GetPublished(excludeHome: true),
+            PublishedPages = _pageRepo.GetPublished(excludeChildren: true),
             QuickTagService = _quickTagService,
         };
         return View(model);

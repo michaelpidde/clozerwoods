@@ -1,5 +1,22 @@
-﻿@using ClozerWoods.Models.ViewModels
+﻿@using ClozerWoods.Models.Entities
+@using ClozerWoods.Models.ViewModels
 @model SharedViewModel
+
+@{
+    async Task RenderNavigationNode(IEnumerable<Page> pages) {
+        <ul>
+            @foreach(var p in pages) {
+
+                <li>
+                    <a asp-area="" asp-controller="Public" asp-action="Page" asp-route-stub="@p.Stub">@p.Title</a>
+                    @if(p.Children != null) {
+                        await RenderNavigationNode(p.Children);
+                    }
+                </li>
+            }
+        </ul>
+    }
+}
 
 <!doctype html>
 <html lang="en">
@@ -19,14 +36,9 @@
             @if(Model.PublishedPages != null && Model.PublishedPages.Any()) {
                 <aside class="rounded">
                     <nav>
-                        <ul>
-                            <li><a asp-area="" asp-controller="Public" asp-action="Index">Home</a></li>
-                            @foreach(var p in Model.PublishedPages!) {
-                                <li><a asp-area="" asp-controller="Public" asp-action="Page" asp-route-stub="@p.Stub">@p.Title</a></li>
-                            }
-                            <li><hr /></li>
-                            <li><a asp-area="" asp-controller="MainGate" asp-action="Dashboard">Dashboard</a></li>
-                        </ul>
+                        @{
+                            await RenderNavigationNode(Model.PublishedPages);
+                        }
                     </nav>
                 </aside>
             }

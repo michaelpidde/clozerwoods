@@ -34,5 +34,10 @@ public class ApplicationDbContext : DbContext {
         modelBuilder.Entity<Gallery>()
             .Navigation(g => g.MediaItems)
             .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+        modelBuilder.Entity<Page>()
+            .HasMany(p => p.Children)
+            .WithOne(p => p.Parent)
+            .HasForeignKey(p => p.ParentId);
     }
 }

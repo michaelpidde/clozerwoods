@@ -107,7 +107,7 @@ namespace ClozerWoods.Controllers {
             }
 
             var model = new PageViewModel {
-                ParentPageList = _pageRepo.GetForSelect(null, "* Select"),
+                ParentPageList = _pageRepo.GetForSelect((selected != null) ? selected.ParentId : null, "* Select"),
                 SelectedPage = selected,
             };
 

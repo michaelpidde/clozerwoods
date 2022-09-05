@@ -59,10 +59,11 @@ public class PageRepository : IPageRepository {
         });
     }
 
-    public IEnumerable<Page> GetPublished(bool excludeHome = false) {
+    public IEnumerable<Page> GetPublished(bool excludeHome = false, bool excludeChildren = false) {
         return Pages
             .Where(p => excludeHome ? p.IsHome == false && p.Published : p.Published)
-            .OrderBy(x => x.IsHome)
+            .Where(p => excludeChildren && p.ParentId == null)
+            .OrderByDescending(x => excludeHome != true && x.IsHome)
             .ThenBy(x => x.Title);
     }
 

@@ -10,4 +10,6 @@ public class Page {
     public bool Published { get; set; }
     public DateTime Created { get; init; }
     public DateTime Updated { get; set; }
+    public Page? Parent { get; set; }
+    public IEnumerable<Page> Children { get; set; }
 }

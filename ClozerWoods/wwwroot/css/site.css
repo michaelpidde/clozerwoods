@@ -49,6 +49,14 @@ nav ul {
     list-style: none;
 }
 
+nav ul ul {
+    padding-left: 15px;
+}
+
+nav ul ul li:before {
+    content: '|';
+}
+
 li hr {
     margin-top: 12px;
     border: 1px dotted #523827;
@@ -413,4 +421,11 @@ article h2 {
 #media-item-grid > div img {
     border: 1px solid #000000;
     cursor: pointer;
+}
+
+
+
+/* GALLERY */
+.gallery {
+    clear: both;
 }
